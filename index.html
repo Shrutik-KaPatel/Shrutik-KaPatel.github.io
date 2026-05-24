@@ -402,20 +402,36 @@
 
       <!-- STM32 — wide featured -->
       <div class="pcard fade-up" style="grid-column:span 12">
-        <div class="pcard-wide-inner" style="height:255px;">
-          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=80" alt="STM32 Firmware" />
-          <div class="pcard-wide-ov">
-            <div class="pcard-wide-content">
-              <span class="pcard-badge">Embedded Firmware · Featured</span>
-              <div class="pcard-wide-title">STM32 Peripheral Firmware Development</div>
-              <div class="pcard-wide-desc">Firmware on STM32F407G-DISC1 (ARM Cortex-M4, 168 MHz) targeting GPIO, UART, ADC, DAC, and PWM via HAL &amp; STM32CubeMX. Implemented DMA-driven UART receive with callback-based buffer handling, eliminating CPU polling on USART2 via DMA1 Stream5. Debugged real hardware issues: HardFaults, port conflicts, DMA restart logic.</div>
-              <div class="pills"><span class="pill">Embedded C</span><span class="pill">STM32F407</span><span class="pill">ARM Cortex-M4</span><span class="pill">HAL</span><span class="pill">DMA</span><span class="pill">UART</span><span class="pill">ADC/DAC</span><span class="pill">STM32CubeMX</span></div>
-              <a href="https://github.com/Shrutik-KaPatel/stm32-playground" target="_blank" class="pcard-wide-gh">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-                github.com/Shrutik-KaPatel/stm32-playground
-              </a>
-            </div>
+        <div style="padding:2.5rem 3rem;">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem;">
+            <span class="pcard-badge" style="position:static;display:inline-block;">Embedded Firmware</span>
+            <span class="pcard-badge" style="position:static;display:inline-block;background:rgba(39,201,64,.12);border-color:rgba(39,201,64,.4);color:#27c940;">Featured</span>
           </div>
+          <div style="font-family:var(--serif);font-size:1.6rem;font-weight:600;color:var(--fg);margin-bottom:.9rem;line-height:1.2;">STM32 Embedded Systems: Full Peripheral Stack</div>
+          <div style="font-size:.88rem;line-height:1.8;color:var(--fg-muted);margin-bottom:1.25rem;max-width:900px;">
+            A progressive, hands-on firmware portfolio targeting the <strong style="color:var(--primary)">STM32F407G-DISC1 (ARM Cortex-M4, 168 MHz)</strong>. Covers the full driver stack from HAL abstraction to <strong style="color:var(--fg)">bare-metal register access</strong> against RM0090 - with zero reliance on generated code at the lower levels. Every project targets a real hardware problem, verified with a logic analyzer or oscilloscope. Debugged real faults: voltage divider pull resistor conflicts, ISR timing races, and DMA restart edge cases.
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem .5rem;margin-bottom:1.25rem;max-width:860px;">
+            <div style="display:flex;gap:.5rem;align-items:flex-start;font-size:.82rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;">•</span>Custom I2C driver + logic analyzer verification of every transaction</div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start;font-size:.82rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;">•</span>Bare-metal TRNG via direct register casting - no HAL, no CubeMX</div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start;font-size:.82rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;">•</span>USB DFU bootloader jump via .noinit section &amp; VTOR remapping</div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start;font-size:.82rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;">•</span>DMA UART RX in Normal &amp; Circular modes with ISR-to-mainloop bridging</div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start;font-size:.82rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;">•</span>Portable I2C library with handler/struct abstraction - reusable across targets</div>
+            <div style="display:flex;gap:.5rem;align-items:flex-start;font-size:.82rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;">•</span>PWM breathing LED with runtime duty cycle control via timer compare</div>
+          </div>
+          <div class="pills" style="margin-bottom:1.1rem;">
+            <span class="pill" style="background:rgba(0,212,255,.15);color:var(--primary);font-weight:600;">Embedded C</span>
+            <span class="pill" style="background:rgba(0,212,255,.15);color:var(--primary);font-weight:600;">STM32F407</span>
+            <span class="pill" style="background:rgba(0,212,255,.15);color:var(--primary);font-weight:600;">ARM Cortex-M4</span>
+            <span class="pill">HAL / LL Drivers</span><span class="pill">Bare-Metal</span><span class="pill">DMA</span>
+            <span class="pill">I2C / SPI</span><span class="pill">UART</span><span class="pill">PWM / Timers</span>
+            <span class="pill">USB DFU</span><span class="pill">Bootloader</span><span class="pill">Logic Analyzer</span>
+            <span class="pill">STM32CubeMX</span>
+          </div>
+          <a href="https://github.com/Shrutik-KaPatel/stm32-playground" target="_blank" class="pcard-wide-gh">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            github.com/Shrutik-KaPatel/stm32-playground
+          </a>
         </div>
       </div>
 
@@ -548,11 +564,11 @@
           <div class="t-bar"><div class="t-dot" style="background:#FF5F57"></div><div class="t-dot" style="background:#FEBC2E"></div><div class="t-dot" style="background:#28C840"></div><span class="t-title">learning.log</span></div>
           <div class="t-body">
             <div class="t-cmd">$ tail -f currently_learning.txt</div>
-            <div style="display:flex;gap:.4rem;margin-top:.2rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)";color:var(--fg-muted)">Memory management &amp; heap/stack internals</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">GDB debugging &amp; runtime analysis</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Compilation toolchain (gcc, ld, objdump)</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Makefile &amp; build systems</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Shell scripting &amp; Linux CLI mastery</span></div>
+            <div style="display:flex;gap:.4rem;margin-top:.2rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Bare-metal &amp; LL driver peripheral programming</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">FreeRTOS — tasks, queues &amp; real-time scheduling</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Custom peripheral drivers from scratch (I2C, SPI)</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">DMA, interrupts &amp; low-level memory management</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Hardware debugging — logic analyzer, SWD, J-Link</span></div>
           </div>
         </div>
 
