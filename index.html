@@ -43,7 +43,7 @@
     .container{max-width:1280px;margin:0 auto;padding:0 3rem;}
 
     /* SECTION LABEL */
-    .sec-label{display:flex;align-items:center;gap:1rem;margin-bottom:4rem;}
+    .sec-label{display:flex;align-items:center;gap:1rem;margin-bottom:2.75rem;}
     .sec-label-text{font-family:var(--mono);font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;color:var(--primary);font-weight:600;white-space:nowrap;}
     .sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(0,212,255,.3),transparent);transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.22,1,.36,1);}
     .sec-line.revealed{transform:scaleX(1);}
@@ -103,7 +103,7 @@
     .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--primary),transparent);}
 
     /* ABOUT */
-    #about{padding:8rem 0;position:relative;overflow:hidden;}
+    #about{padding:5.5rem 0;position:relative;overflow:hidden;}
     .about-grid{display:grid;grid-template-columns:6fr 6fr;gap:6rem;align-items:start;}
     .about-h2{font-family:var(--serif);font-size:clamp(2rem,3.2vw,2.9rem);line-height:1.15;margin-bottom:1.75rem;}
     .about-p{font-size:.91rem;line-height:1.85;color:var(--fg-muted);margin-bottom:1.2rem;}
@@ -127,7 +127,7 @@
     .c-cmt{color:#3a4560;}.c-kw{color:var(--primary);}.c-type{color:#7dd3fc;}.c-str{color:#86efac;}.c-num{color:#fcd34d;}.c-pp{color:#c084fc;}
 
     /* PROJECTS */
-    #projects{padding:8rem 0;background:linear-gradient(180deg,#030712 0%,#070d1a 50%,#030712 100%);position:relative;}
+    #projects{padding:5.5rem 0;background:linear-gradient(180deg,#030712 0%,#070d1a 50%,#030712 100%);position:relative;}
     #projects::before,#projects::after{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.2),transparent);}
     #projects::before{top:0;}#projects::after{bottom:0;}
     .proj-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:3.5rem;flex-wrap:wrap;}
@@ -165,7 +165,7 @@
     .btn-gh:hover{border-color:var(--primary);background:rgba(0,212,255,.05);}
 
     /* SKILLS */
-    #skills{padding:8rem 0;position:relative;overflow:hidden;}
+    #skills{padding:5.5rem 0;position:relative;overflow:hidden;}
     .skills-grid{display:grid;grid-template-columns:7fr 5fr;gap:5rem;align-items:start;}
     .skills-h2{font-family:var(--serif);font-size:clamp(2rem,3.2vw,2.9rem);line-height:1.2;margin-bottom:2.5rem;}
     .skill-terminal{margin-bottom:1.1rem;}
@@ -182,7 +182,7 @@
     .qs-val{font-size:.83rem;color:var(--fg-muted);line-height:1.5;}
 
     /* EXPERIENCE */
-    #experience{padding:6rem 0;background:rgba(10,15,26,.35);}
+    #experience{padding:4.5rem 0;background:rgba(10,15,26,.35);}
     .exp-card{border:1px solid var(--border);border-radius:12px;padding:2rem 2.25rem;background:rgba(13,18,32,.6);position:relative;overflow:hidden;max-width:780px;}
     .exp-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--primary),var(--blue));}
     .exp-header{display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;margin-bottom:.45rem;flex-wrap:wrap;}
@@ -194,7 +194,7 @@
     .exp-bullets li::before{content:'›';color:var(--primary);font-family:var(--mono);flex-shrink:0;}
 
     /* LAB NOTES */
-    #lab-notes{padding:5rem 0;}
+    #lab-notes{padding:4rem 0;}
     .lab-inner{border:1px solid var(--border);border-radius:14px;padding:2.5rem 3rem;background:rgba(13,18,32,.45);display:flex;align-items:center;justify-content:space-between;gap:3rem;flex-wrap:wrap;}
     .lab-title{font-family:var(--serif);font-size:1.6rem;color:var(--fg);margin-bottom:.7rem;}
     .lab-desc{font-size:.95rem;color:var(--fg-muted);line-height:1.75;max-width:520px;}
@@ -204,7 +204,7 @@
     .lab-link:hover{background:rgba(0,212,255,.07);box-shadow:0 0 24px var(--glow);}
 
     /* CONTACT */
-    #contact{padding:8rem 0;}
+    #contact{padding:5.5rem 0;}
     .contact-grid{display:grid;grid-template-columns:5fr 7fr;gap:5rem;align-items:start;}
     .contact-h2{font-family:var(--serif);font-size:clamp(2rem,3vw,2.7rem);line-height:1.2;margin-bottom:1rem;}
     .contact-p{font-size:.9rem;line-height:1.8;color:var(--fg-muted);margin-bottom:2rem;}
@@ -231,9 +231,51 @@
     footer a{color:var(--fg-dim);text-decoration:none;transition:color .2s;}
     footer a:hover{color:var(--primary);}
 
+
+
+    /* === M1 CIRCUIT HERO === */
+    .hero-ambient{position:absolute;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(38% 46% at 74% 26%, rgba(0,160,255,.14) 0%, rgba(0,160,255,0) 100%),
+        radial-gradient(44% 52% at 84% 78%, rgba(255,60,0,.14) 0%, rgba(255,60,0,0) 100%),
+        radial-gradient(30% 34% at 62% 55%, rgba(90,60,255,.08) 0%, rgba(90,60,255,0) 100%);
+      filter:saturate(1.2);}
+
+    #hero{position:relative;z-index:2;grid-template-columns:6fr 6fr;}
+    .hero-content{max-width:600px;}
+    #circuit-2d{width:100%;height:560px;display:block;}
+    .hero-right{position:relative;}
+    .hero-terminal-hud{position:absolute;bottom:5rem;right:8rem;width:320px;z-index:3;}
+    .hero-terminal-hud .terminal{box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 40px rgba(0,212,255,.07);}
+
+    /* === WAVE DIVIDERS === */
+    .wave-divider{display:block;width:100%;height:56px;position:relative;z-index:2;opacity:.65;}
+
+    /* === CARD MOUSE GLOW === */
+    .pcard::after{content:'';position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(0,212,255,.09),transparent 60%);opacity:0;transition:opacity .35s;pointer-events:none;border-radius:12px;}
+    .pcard:hover::after{opacity:1;}
+    .edu-card,.exp-card,.gh-repo,.clink,.qs-card,.terminal{backdrop-filter:blur(14px);}
+
+    /* === LED ON CARD HOVER === */
+    .pcard-id::before{content:'●';color:var(--primary);margin-right:.4rem;opacity:0;transition:opacity .2s;}
+    .pcard:hover .pcard-id::before{opacity:1;animation:ledblink .7s step-end infinite;}
+    @keyframes ledblink{0%,100%{opacity:1;}50%{opacity:.15;}}
+
+    /* === SKILL TAG TYPE-IN === */
+    .skill-tags .skill-tag{opacity:0;transform:translateY(8px) scale(.92);transition:opacity .4s cubic-bezier(.23,1,.32,1),transform .4s cubic-bezier(.23,1,.32,1),border-color .2s,color .2s,background .2s;}
+    .skill-terminal.revealed .skill-tag{opacity:1;transform:none;}
+
+    /* === STAT FLICKER === */
+    @keyframes regwrite{0%{opacity:0;}20%{opacity:1;}35%{opacity:.3;}50%{opacity:1;}65%{opacity:.5;}100%{opacity:1;}}
+    .stat.revealed .stat-val{animation:regwrite .7s ease-out both;}
+
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+      .wave-divider{display:none;}
+    }
     @media(max-width:1024px){
       #hero{grid-template-columns:1fr;padding:5rem 1.5rem 3rem;}
-      .hero-right{display:none;}
+      .hero-right,.hero-terminal-hud{display:none;}
       .stats-bar{grid-template-columns:1fr 1fr;}
       .about-grid,.skills-grid,.contact-grid{grid-template-columns:1fr;}
       .bento{grid-template-columns:1fr;}
@@ -269,37 +311,38 @@
 <!-- HERO -->
 <section style="position:relative;">
   <div class="orb" style="width:580px;height:580px;top:-120px;left:-220px;background:radial-gradient(circle,rgba(0,102,255,.1) 0%,transparent 70%);"></div>
-  <div class="orb" style="width:340px;height:340px;bottom:-60px;right:-80px;background:radial-gradient(circle,rgba(0,212,255,.07) 0%,transparent 70%);animation-delay:5s;"></div>
+
+  <div class="hero-ambient" aria-hidden="true"></div>
   <div id="hero">
-    <div>
+    <div class="hero-content">
       <div class="hero-badge fade-up"><span style="color:var(--primary)">~/</span> firmware · rtl · iot <span style="color:var(--primary);animation:pulse 1.5s ease-in-out infinite;display:inline-block;">_</span></div>
       <h1 class="hero-name fade-up d1"><span>Shrutik</span><em class="gt">Ka Patel</em></h1>
       <div class="hero-sub fade-up d1">
         <span class="hero-sub-line"></span>
         <span class="hero-sub-text">Embedded Firmware Developer · ARM Cortex-M4 · HW-SW Integration</span>
       </div>
-      <p class="hero-bio fade-up d2">MEng Electrical Engineering graduate (Carleton University, GPA 10.4/12) with hands-on firmware experience on STM32F407 (ARM Cortex-M4) — GPIO, UART/DMA, ADC, DAC, and PWM. Background in RTL design, FPGA development, and end-to-end IoT systems. Targeting embedded firmware and hardware-software co-design roles.</p>
+      <p class="hero-bio fade-up d2">MEng Electrical Engineering graduate (Carleton University, GPA 10.4/12) with hands-on firmware experience on STM32F407 (ARM Cortex-M4) targeting GPIO, UART/DMA, ADC, DAC, and PWM. Background in RTL design, FPGA development, and end-to-end IoT systems. Targeting embedded firmware and hardware-software co-design roles.</p>
       <div class="hero-btns fade-up d3">
         <a href="#projects" class="btn-p">View Projects</a>
         <a href="#contact" class="btn-s">Contact</a>
       </div>
       <p class="hero-loc fade-up d3">Ottawa, Canada &nbsp;·&nbsp; Open to Relocation</p>
     </div>
+
     <div class="hero-right fade-up d1">
-      <div class="hero-img-wrap">
-        <img src="https://images.unsplash.com/photo-1593687395549-400945fed803?w=800&q=80" alt="Circuit board" />
-        <div class="hero-terminal-card">
-          <div class="terminal">
-            <div class="t-bar">
-              <div class="t-dot" style="background:#FF5F57"></div>
-              <div class="t-dot" style="background:#FEBC2E"></div>
-              <div class="t-dot" style="background:#28C840"></div>
-              <span class="t-title">shrutik.sh</span>
-            </div>
-            <div class="t-body" id="terminal-out"></div>
-          </div>
-        </div>
+      <canvas id="circuit-2d" aria-label="Animated circuit radiating from a processor"></canvas>
+    </div>
+  </div>
+
+  <div class="hero-terminal-hud fade-up d2">
+    <div class="terminal">
+      <div class="t-bar">
+        <div class="t-dot" style="background:#FF5F57"></div>
+        <div class="t-dot" style="background:#FEBC2E"></div>
+        <div class="t-dot" style="background:#28C840"></div>
+        <span class="t-title">shrutik.sh</span>
       </div>
+      <div class="t-body" id="terminal-out"></div>
     </div>
   </div>
   <div class="scroll-hint"><span>scroll</span><div class="scroll-line"></div></div>
@@ -312,6 +355,8 @@
   <div class="stat fade-up d2"><div class="stat-val sm">UART · SPI · I²C · DMA</div><div class="stat-lbl">Protocols Implemented</div></div>
   <div class="stat fade-up d3"><div class="stat-val sm">Firmware · RTL · IoT</div><div class="stat-lbl">Focus Areas</div></div>
 </div>
+
+<canvas class="wave-divider" data-wave="pwm"></canvas>
 
 <!-- ABOUT -->
 <section id="about">
@@ -411,14 +456,16 @@
           <div style="font-size:.88rem;line-height:1.8;color:var(--fg-muted);margin-bottom:1rem;max-width:920px;">
             A comprehensive, hands-on firmware portfolio built on the <strong style="color:var(--primary)">STM32F407G-DISC1 (ARM Cortex-M4, 168 MHz)</strong>, progressing deliberately from HAL abstractions to <strong style="color:var(--fg)">bare-metal register-level control</strong> without HAL or CubeMX. Every project targets a real peripheral problem, verified on hardware. Real bugs encountered and solved: voltage divider pull resistor conflicts, DMA restart edge cases, ISR timing races, watchdog window violations, and USB DFU boot sequencing. All projects developed on Linux with a logic analyzer, ST-LINK/V2-A, and a SEGGER J-Link Pro.
           </div>
-          <div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--primary);font-weight:600;margin-bottom:.75rem;">Key Differentiators</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem 2rem;margin-bottom:1.25rem;max-width:920px;">
-            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">Bare-metal TRNG</strong> - direct register casting against RM0090, zero HAL, zero CubeMX code</span></div>
-            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">IWDG + WWDG watchdogs</strong> - timeout math, reset cause detection, deliberate failure testing on hardware</span></div>
-            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">Portable driver libraries</strong> - handle/struct abstraction for I2C and SPI, reusable across targets</span></div>
-            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">PWM input capture</strong> - one timer generates, another measures, self-verified without external equipment</span></div>
-            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">Logic analyzer on every I2C/SPI project</strong> - every transaction decoded at the wire level</span></div>
-            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">USB DFU bootloader</strong> - software jump via .noinit section, VTOR remapping, dual USB port workflow</span></div>
+          <div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--primary);font-weight:600;margin-bottom:.75rem;">Key Projects</div>
+          <div style="display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.25rem;max-width:920px;">
+            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">FreeRTOS on hardware (CMSIS-OS v2)</strong> - tasks, queues with backpressure, binary &amp; counting semaphores, mutexes with starvation testing, event flags for AND-logic synchronization across independent conditions - all 7 sessions verified running on STM32F407</span></div>
+            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">20+ firmware projects</strong> spanning GPIO, timers, PWM, ADC, DAC, SPI, I2C, UART, DMA, watchdogs, and bootloader modification using both HAL and direct register access</span></div>
+            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">MEMS_TiltLEDs capstone</strong> - real-time tilt indicator combining SPI DMA burst reads, DRDY interrupt via EXTI, TIM2 calibration animation, and button-triggered baseline capture from onboard LIS3DSHTR accelerometer. Debugged EXTI line conflict: PA0 and PE0 both on EXTI line 0</span></div>
+            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">Bare-metal TRNG</strong> - direct register pointer casting against RM0090, no HAL, no CubeMX - demonstrates ability to work from reference manual at the register level</span></div>
+            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">Portable SPI + I2C driver libraries</strong> - handler/struct abstraction pattern, struct members derived from HAL signatures, internal helpers hidden from public API, reusable across peripherals</span></div>
+            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">USB DFU bootloader</strong> - software jump to ROM bootloader via persistent 0xDEADBEEF flag in .noinit linker section, VTOR remapping, verified with STM32CubeProgrammer</span></div>
+            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">IWDG + WWDG watchdogs</strong> - deliberate failure mode testing on hardware: early kick and late kick cases both confirmed on WWDG, reset cause detection via RCC_CSR flags</span></div>
+            <div style="display:flex;gap:.55rem;align-items:flex-start;font-size:.83rem;color:var(--fg-muted);"><span style="color:var(--primary);flex-shrink:0;font-weight:700;">•</span><span><strong style="color:var(--fg);font-weight:600;">PWM input capture</strong> - TIM4 generates 1kHz at 30% duty, TIM3 measures via input capture - self-verified frequency and duty cycle over UART without external equipment</span></div>
           </div>
           <div class="pills" style="margin-bottom:1.1rem;">
             <span class="pill" style="background:rgba(0,212,255,.15);color:var(--primary);font-weight:600;">Embedded C</span>
@@ -516,6 +563,8 @@
   </div>
 </section>
 
+<canvas class="wave-divider" data-wave="uart"></canvas>
+
 <!-- SKILLS -->
 <section id="skills">
   <div class="container">
@@ -565,11 +614,11 @@
           <div class="t-bar"><div class="t-dot" style="background:#FF5F57"></div><div class="t-dot" style="background:#FEBC2E"></div><div class="t-dot" style="background:#28C840"></div><span class="t-title">learning.log</span></div>
           <div class="t-body">
             <div class="t-cmd">$ tail -f currently_learning.txt</div>
-            <div style="display:flex;gap:.4rem;margin-top:.2rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Bare-metal &amp; LL driver peripheral programming</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">FreeRTOS — tasks, queues &amp; real-time scheduling</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Custom peripheral drivers from scratch (I2C, SPI)</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">DMA, interrupts &amp; low-level memory management</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Hardware debugging — logic analyzer, SWD, J-Link</span></div>
+            <div style="display:flex;gap:.4rem;margin-top:.2rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">FreeRTOS deferred interrupt processing &amp; stack sizing</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Stack overflow detection, configASSERT &amp; J-Link thread-aware debugging</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Watchdog integration with RTOS tasks</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">CMake CD pipeline - auto-publish .bin as GitHub Release</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">LL driver peripheral programming (below HAL)</span></div>
           </div>
         </div>
 
@@ -620,6 +669,8 @@
     </div>
   </div>
 </section>
+
+<canvas class="wave-divider" data-wave="sine"></canvas>
 
 <!-- CONTACT -->
 <section id="contact">
@@ -753,6 +804,326 @@ window.addEventListener('scroll',()=>{
   let c=''; secs.forEach(s=>{if(scrollY>=s.offsetTop-110)c=s.id;});
   navAs.forEach(a=>{a.style.color=a.getAttribute('href')==='#'+c?'var(--primary)':'';});
 },{passive:true});
+</script>
+
+
+<script>
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ===== PCB CIRCUIT — orthogonal, thin, hollow vias ===== */
+(function(){
+  const cv = document.getElementById('circuit-2d');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  let W,H,DPR,traces=[],chip={},mouse={x:-999,y:-999};
+
+  // Palette: cyan dominant, purple accent, orange accent (matches reference)
+  const CYAN='#00D4FF', PURPLE='#8A4FFF', ORANGE='#FF4500';
+  const PAL=[CYAN,CYAN,CYAN,'#1AAFFF',PURPLE,'#6633FF',ORANGE];
+
+  function build(){
+    DPR=Math.min(devicePixelRatio,2);
+    W=cv.clientWidth; H=cv.clientHeight;
+    cv.width=W*DPR; cv.height=H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    chip={x:W*.5,y:H*.5,w:Math.min(W,H)*.32,h:Math.min(W,H)*.32};
+    buildTraces();
+  }
+
+  function buildTraces(){
+    traces=[];
+    const cx=chip.x, cy=chip.y, cw=chip.w, ch=chip.h;
+    // spawn points on all 4 chip edges
+    const origins=[];
+    const N=9;
+    for(let i=0;i<N;i++){
+      const t=(i+.5)/N;
+      origins.push({x:cx-cw/2, y:cy-ch/2+t*ch, dx:-1, dy:0}); // left
+      origins.push({x:cx+cw/2, y:cy-ch/2+t*ch, dx: 1, dy:0}); // right
+      origins.push({x:cx-cw/2+t*cw, y:cy-ch/2, dx:0, dy:-1}); // top
+      origins.push({x:cx-cw/2+t*cw, y:cy+ch/2, dx:0, dy: 1}); // bottom
+    }
+
+    origins.forEach(o=>{
+      const col=PAL[Math.floor(Math.random()*PAL.length)];
+      const fat=Math.random()<.18;
+      let px=o.x, py=o.y;
+      const pts=[{x:px,y:py}];
+
+      // Segment 1: long straight outward (horizontal or vertical)
+      const run1=70+Math.random()*130;
+      px+=o.dx*run1; py+=o.dy*run1;
+      pts.push({x:px,y:py});
+
+      // Single 90° turn: if was horizontal → go vertical, and vice versa
+      if(Math.random()<.85){
+        const perp=(Math.random()<.5?1:-1);
+        const nx=o.dy!==0?1:0, ny=o.dx!==0?1:0; // perpendicular axes
+        const run2=30+Math.random()*90;
+        px+=nx*perp*run2; py+=ny*perp*run2;
+        pts.push({x:px,y:py});
+        // optional third segment back along original direction
+        if(Math.random()<.45){
+          const run3=25+Math.random()*70;
+          px+=o.dx*run3; py+=o.dy*run3;
+          pts.push({x:px,y:py});
+        }
+      }
+
+      const cum=[0]; let tot=0;
+      for(let k=1;k<pts.length;k++){tot+=Math.hypot(pts[k].x-pts[k-1].x,pts[k].y-pts[k-1].y);cum.push(tot);}
+      traces.push({pts,cum,tot,col,fat,
+        pulse:-Math.random()*tot,
+        speed:60+Math.random()*80,
+        flash:0,hot:0});
+    });
+  }
+
+  build(); addEventListener('resize',build);
+  cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
+  cv.addEventListener('mouseleave',()=>{mouse.x=-999;mouse.y=-999;});
+
+  function posAt(tr,d){
+    d=Math.max(0,Math.min(d,tr.tot));
+    for(let k=1;k<tr.cum.length;k++){
+      if(d<=tr.cum[k]){
+        const t=(d-tr.cum[k-1])/((tr.cum[k]-tr.cum[k-1])||1);
+        return{x:tr.pts[k-1].x+(tr.pts[k].x-tr.pts[k-1].x)*t,
+               y:tr.pts[k-1].y+(tr.pts[k].y-tr.pts[k-1].y)*t};
+      }
+    }
+    return tr.pts[tr.pts.length-1];
+  }
+
+  let last=performance.now(),t=0,sloganChars=0,sloganDone=false,chipHot=0;
+  const SLOGAN='power is building_';
+
+  function frame(now){
+    requestAnimationFrame(frame);
+    const dt=Math.min((now-last)/1000,.05);last=now;t+=dt;
+    ctx.clearRect(0,0,W,H);
+
+    // background: deep blue-purple atmosphere matching reference
+    const bg=ctx.createRadialGradient(W*.62,H*.45,0,W*.62,H*.45,W*.72);
+    bg.addColorStop(0,'rgba(10,20,60,.5)');
+    bg.addColorStop(.5,'rgba(5,8,28,.35)');
+    bg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    // warm accent right side
+    const og=ctx.createRadialGradient(W*.88,H*.75,0,W*.88,H*.75,W*.45);
+    og.addColorStop(0,'rgba(180,40,0,.12)');
+    og.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=og; ctx.fillRect(0,0,W,H);
+
+    // mouse parallax offset
+    const inCanvas = mouse.x>0 && mouse.x<W && mouse.y>0 && mouse.y<H;
+    const ox = inCanvas ? (mouse.x-W/2)*.018 : 0;
+    const oy = inCanvas ? (mouse.y-H/2)*.018 : 0;
+    ctx.save(); ctx.translate(ox,oy);
+    ctx.lineCap='square'; ctx.lineJoin='miter'; // sharp PCB corners
+
+    traces.forEach(tr=>{
+      const end=tr.pts[tr.pts.length-1],st=tr.pts[0];
+      const near=Math.min(
+        Math.hypot(st.x-mouse.x,st.y-mouse.y),
+        Math.hypot(end.x-mouse.x,end.y-mouse.y));
+      tr.hot+=(( near<120?1:0 )-tr.hot)*dt*5;
+
+      // thin trace line
+      ctx.strokeStyle=tr.col;
+      ctx.lineWidth=tr.fat?1.8:1.1;
+      ctx.globalAlpha=0.55+tr.hot*.35;
+      ctx.shadowColor=tr.col; ctx.shadowBlur=tr.hot*12;
+      ctx.beginPath(); ctx.moveTo(st.x,st.y);
+      for(let k=1;k<tr.pts.length;k++) ctx.lineTo(tr.pts[k].x,tr.pts[k].y);
+      ctx.stroke();
+
+      // hollow circle via at end (like the reference)
+      ctx.globalAlpha=0.75+tr.hot*.25;
+      ctx.shadowBlur=tr.hot*10;
+      ctx.beginPath(); ctx.arc(end.x,end.y,4.5+tr.flash*2.5,0,7);
+      ctx.fillStyle='#030712'; ctx.fill();
+      ctx.lineWidth=1.5; ctx.strokeStyle=tr.col; ctx.stroke();
+      tr.flash=Math.max(0,tr.flash-dt*4);
+
+      // comet pulse — thin bright line streak
+      if(!reduceMotion){
+        tr.pulse+=tr.speed*dt*(1+tr.hot);
+        if(tr.pulse>tr.tot+30){tr.pulse=-60-Math.random()*180;tr.flash=.8;}
+        if(tr.pulse>0){
+          const TAIL=36,STEPS=6;
+          ctx.shadowBlur=14+tr.hot*8;
+          for(let s=0;s<STEPS;s++){
+            const d1=tr.pulse-s*(TAIL/STEPS), d0=d1-TAIL/STEPS;
+            if(d1<=0) break;
+            const p0=posAt(tr,d0),p1=posAt(tr,d1);
+            const a=(1-s/STEPS);
+            ctx.globalAlpha=a*.85;
+            ctx.strokeStyle=s===0?'rgba(240,252,255,.98)':tr.col;
+            ctx.lineWidth=(tr.fat?2.4:1.8)*a+.4;
+            ctx.beginPath(); ctx.moveTo(p0.x,p0.y); ctx.lineTo(p1.x,p1.y); ctx.stroke();
+          }
+        }
+      }
+      ctx.globalAlpha=1; ctx.shadowBlur=0;
+    });
+
+    // ---- CHIP ----
+    ctx.save(); ctx.translate(-ox*.3,-oy*.3); // chip moves less = depth
+    const cw=chip.w,ch=chip.h,cx=chip.x-cw/2,cy=chip.y-ch/2;
+    const dM=Math.hypot(mouse.x-chip.x,mouse.y-chip.y);
+    chipHot+=(((dM<cw*.8)?1:0)-chipHot)*dt*5;
+
+    function pkgPath(pad){const p=pad||0,C=cw*.1;
+      ctx.beginPath();
+      ctx.moveTo(cx+C-p*.4,cy-p); ctx.lineTo(cx+cw-C+p*.4,cy-p);
+      ctx.lineTo(cx+cw+p,cy+C-p*.4); ctx.lineTo(cx+cw+p,cy+ch-C+p*.4);
+      ctx.lineTo(cx+cw-C+p*.4,cy+ch+p); ctx.lineTo(cx+C-p*.4,cy+ch+p);
+      ctx.lineTo(cx-p,cy+ch-C+p*.4); ctx.lineTo(cx-p,cy+C-p*.4);
+      ctx.closePath();}
+
+    // metallic pins
+    ctx.fillStyle='#2c3e58';
+    const PIN=7,PW=cw/17;
+    for(let i=0;i<PIN;i++){
+      const o=cx+cw*.14+i*(cw*.72/(PIN-1))-PW/2;
+      ctx.fillRect(o,cy-7,PW,7); ctx.fillRect(o,cy+ch,PW,7);
+      const o2=cy+ch*.14+i*(ch*.72/(PIN-1))-PW/2;
+      ctx.fillRect(cx-7,o2,7,PW); ctx.fillRect(cx+cw,o2,7,PW);
+    }
+    // body
+    const bodyG=ctx.createLinearGradient(cx,cy,cx+cw,cy+ch);
+    bodyG.addColorStop(0,'#0a1120'); bodyG.addColorStop(.5,'#04070e'); bodyG.addColorStop(1,'#150d08');
+    // dual glow shadow
+    ctx.save();
+    ctx.shadowColor='rgba(0,200,255,'+(.7+chipHot*.3)+')'; ctx.shadowBlur=20+chipHot*14; ctx.shadowOffsetX=-6; ctx.shadowOffsetY=-6;
+    ctx.fillStyle='#04070e'; pkgPath(); ctx.fill();
+    ctx.shadowColor='rgba(255,50,0,'+(.7+chipHot*.3)+')'; ctx.shadowBlur=20+chipHot*14; ctx.shadowOffsetX=6; ctx.shadowOffsetY=6;
+    pkgPath(); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle=bodyG; pkgPath(); ctx.fill();
+    // rim: red-orange → amber → cyan
+    const rimG=ctx.createLinearGradient(cx,cy+ch,cx+cw,cy);
+    rimG.addColorStop(0,'rgba(255,30,0,'+(.9+chipHot*.1)+')');
+    rimG.addColorStop(.45,'rgba(255,100,0,'+(.8+chipHot*.2)+')');
+    rimG.addColorStop(.75,'rgba(255,160,30,'+(.65+chipHot*.2)+')');
+    rimG.addColorStop(1,'rgba(0,200,255,'+(.6+chipHot*.2)+')');
+    ctx.lineWidth=2.5; ctx.strokeStyle=rimG;
+    ctx.shadowColor='rgba(255,50,0,.65)'; ctx.shadowBlur=10+chipHot*8;
+    pkgPath(); ctx.stroke(); ctx.shadowBlur=0;
+    // inner frame + die
+    ctx.strokeStyle='rgba(120,150,190,.2)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.roundRect(cx+8,cy+8,cw-16,ch-16,6); ctx.stroke();
+    ctx.strokeStyle='rgba(0,210,255,.1)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.roundRect(cx+cw*.18,cy+ch*.16,cw*.64,ch*.5,4); ctx.stroke();
+    // gold pads
+    ctx.fillStyle='rgba(255,180,90,.5)';
+    const padN=6,padS=cw*.042;
+    for(let i=0;i<padN;i++){
+      const o=cx+cw*.2+i*(cw*.6/(padN-1))-padS/2;
+      ctx.fillRect(o,cy+10,padS,padS*.6); ctx.fillRect(o,cy+ch-10-padS*.6,padS,padS*.6);
+      const o2=cy+ch*.2+i*(ch*.6/(padN-1))-padS/2;
+      ctx.fillRect(cx+10,o2,padS*.6,padS); ctx.fillRect(cx+cw-10-padS*.6,o2,padS*.6,padS);
+    }
+    // pin-1 + notch
+    ctx.beginPath(); ctx.arc(cx+cw*.1+6,cy+ch-cw*.1-6,3,0,7); ctx.fillStyle='#FF4500'; ctx.fill();
+    ctx.fillStyle='#0d1424';
+    ctx.beginPath(); ctx.arc(cx+cw/2,cy+2,5,0,Math.PI); ctx.fill();
+    ctx.restore();
+
+    // chip text
+    ctx.save(); ctx.translate(ox*.05,oy*.05);
+    ctx.textAlign='center';
+    ctx.fillStyle='#F0F4FF';
+    ctx.font='700 '+Math.round(cw*.26)+'px Fraunces, serif';
+    ctx.fillText('SKP', chip.x, chip.y+cw*.04);
+    if(!sloganDone){sloganChars+=dt*13;if(sloganChars>=SLOGAN.length){sloganChars=SLOGAN.length;sloganDone=true;}}
+    const shown=SLOGAN.slice(0,Math.floor(sloganChars));
+    ctx.fillStyle='#00E5FF';
+    ctx.font='500 '+Math.round(cw*.065)+'px "JetBrains Mono",monospace';
+    ctx.shadowColor='#00D4FF'; ctx.shadowBlur=10;
+    ctx.fillText(sloganDone&&Math.floor(t*2)%2?shown.slice(0,-1)+' ':shown, chip.x, chip.y+cw*.19);
+    ctx.shadowBlur=0; ctx.restore();
+
+    ctx.restore();
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ===== WAVEFORM DIVIDERS ===== */
+document.querySelectorAll('.wave-divider').forEach(cv=>{
+  const x2 = cv.getContext('2d');
+  const type = cv.dataset.wave;
+  let off=0;
+  function size(){ cv.width = cv.clientWidth; cv.height = cv.clientHeight; }
+  size(); addEventListener('resize', size);
+  function draw(){
+    const W=cv.width, H=cv.height, mid=H/2;
+    x2.clearRect(0,0,W,H);
+    x2.strokeStyle='rgba(0,212,255,.5)'; x2.lineWidth=1.5; x2.beginPath();
+    if(type==='pwm'){
+      const period=90, duty=.3;
+      for(let x=-period;x<W+period;x+=period){
+        const px = x - (off%period);
+        x2.moveTo(px, mid+12); x2.lineTo(px, mid-12);
+        x2.lineTo(px+period*duty, mid-12); x2.lineTo(px+period*duty, mid+12);
+        x2.lineTo(px+period, mid+12);
+      }
+    } else if(type==='uart'){
+      const bit=34; const frame=[1,0,1,0,0,1,1,0,1,1]; // idle,start,data...,stop
+      for(let x=-bit*frame.length;x<W+bit*frame.length;x+=bit*frame.length){
+        frame.forEach((b,i)=>{
+          const px = x + i*bit - (off%(bit*frame.length));
+          const y = b? mid-12 : mid+12;
+          x2.lineTo(px,y); x2.lineTo(px+bit,y);
+        });
+      }
+    } else {
+      for(let x=0;x<=W;x+=3){
+        const y = mid + Math.sin((x+off)*.035)*14;
+        x===0 ? x2.moveTo(x,y) : x2.lineTo(x,y);
+      }
+    }
+    x2.stroke();
+    if(!reduceMotion){ off+=.8; requestAnimationFrame(draw); }
+  }
+  draw();
+});
+
+/* ===== MAGNETIC BUTTONS ===== */
+if(!reduceMotion){
+  document.querySelectorAll('.btn-p,.btn-s,.btn-gh,.lab-link,.nav-cta').forEach(b=>{
+    b.addEventListener('mousemove', e=>{
+      const r=b.getBoundingClientRect();
+      b.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.28}px)`;
+    });
+    b.addEventListener('mouseleave', ()=>{ b.style.transform=''; });
+  });
+}
+
+/* ===== CARD MOUSE GLOW ===== */
+document.querySelectorAll('.pcard').forEach(card=>{
+  card.addEventListener('mousemove', e=>{
+    const r=card.getBoundingClientRect();
+    card.style.setProperty('--mx', (e.clientX-r.left)+'px');
+    card.style.setProperty('--my', (e.clientY-r.top)+'px');
+  });
+});
+
+/* ===== PARALLAX ORBS ===== */
+if(!reduceMotion){
+  const orbs=document.querySelectorAll('.orb');
+  addEventListener('scroll',()=>{
+    const y=scrollY;
+    orbs.forEach((o,i)=>{ o.style.transform=`translateY(${y*(i?-.06:.09)}px)`; });
+  },{passive:true});
+}
+
+/* ===== STAGGERED SKILL TAGS ===== */
+document.querySelectorAll('.skill-terminal').forEach(term=>{
+  term.querySelectorAll('.skill-tag').forEach((tag,i)=>{ tag.style.transitionDelay=(i*45)+'ms'; });
+});
+/* stats reveal class for flicker handled by existing observer adding .revealed to .stat (fade-up) */
 </script>
 </body>
 </html>
