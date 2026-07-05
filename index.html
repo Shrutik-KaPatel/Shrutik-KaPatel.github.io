@@ -2,17 +2,67 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WS2MZCV4PS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WS2MZCV4PS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WS2MZCV4PS');
+  </script>
 
-  gtag('config', 'G-WS2MZCV4PS');
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shrutik Ka Patel — Embedded Firmware Developer</title>
+  <title>Shrutik Ka Patel — Embedded Firmware Developer | STM32 · FreeRTOS · Ottawa</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Shrutik Ka Patel — Embedded Firmware Developer in Ottawa, Canada. Bare-metal C on STM32F407 (ARM Cortex-M4), FreeRTOS, and IoT systems. 20+ firmware projects verified on real hardware. Carleton University MEng graduate." />
+  <meta name="author" content="Shrutik Ka Patel" />
+  <link rel="canonical" href="https://shrutik-kapatel.github.io/" />
+  <meta name="theme-color" content="#030712" />
+
+  <!-- Open Graph (LinkedIn / Facebook link previews) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Shrutik Ka Patel — Portfolio" />
+  <meta property="og:title" content="Shrutik Ka Patel — Embedded Firmware Developer" />
+  <meta property="og:description" content="STM32F407 · ARM Cortex-M4 · FreeRTOS · Bare-metal C. 20+ firmware projects verified on real hardware. Ottawa, open to relocation." />
+  <meta property="og:url" content="https://shrutik-kapatel.github.io/" />
+  <meta property="og:image" content="https://shrutik-kapatel.github.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Shrutik Ka Patel — Embedded Firmware Developer, STM32 · FreeRTOS · IoT" />
+
+  <!-- Twitter / X card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Shrutik Ka Patel — Embedded Firmware Developer" />
+  <meta name="twitter:description" content="STM32F407 · ARM Cortex-M4 · FreeRTOS · Bare-metal C. 20+ firmware projects verified on real hardware." />
+  <meta name="twitter:image" content="https://shrutik-kapatel.github.io/og-image.png" />
+
+  <!-- Favicon: '#' logo box, matches nav -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23030712'/%3E%3Crect x='2' y='2' width='28' height='28' rx='4' fill='none' stroke='%2300D4FF' stroke-width='2'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='18' font-weight='bold' fill='%2300D4FF' text-anchor='middle'%3E%23%3C/text%3E%3C/svg%3E" />
+
+  <!-- Structured data for Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Shrutik Ka Patel",
+    "jobTitle": "Embedded Firmware Developer",
+    "url": "https://shrutik-kapatel.github.io/",
+    "email": "mailto:ka.patelshrutik37@gmail.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "Ottawa", "addressRegion": "ON", "addressCountry": "CA" },
+    "alumniOf": [
+      { "@type": "CollegeOrUniversity", "name": "Carleton University" },
+      { "@type": "CollegeOrUniversity", "name": "CSPIT, CHARUSAT" }
+    ],
+    "knowsAbout": ["Embedded Firmware", "STM32", "ARM Cortex-M4", "FreeRTOS", "Embedded C", "RTOS", "IoT", "SPI", "I2C", "UART", "DMA"],
+    "sameAs": [
+      "https://github.com/Shrutik-KaPatel",
+      "https://linkedin.com/in/shrutik-ka-patel-43aa661aa",
+      "https://youtube.com/@shrutikkapatel"
+    ]
+  }
+  </script>
+
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -282,9 +332,16 @@
       *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
       .wave-divider{display:none;}
     }
+    /* Touch devices: native cursor, hide custom cursor dot */
+    @media(hover:none),(pointer:coarse){
+      body{cursor:auto;}
+      #cur,#cur-r{display:none;}
+    }
     @media(max-width:1024px){
-      #hero{grid-template-columns:1fr;padding:5rem 1.5rem 3rem;}
-      .hero-right,.hero-terminal-hud{display:none;}
+      #hero{grid-template-columns:1fr;gap:2rem;padding:5.5rem 1.5rem 1rem;min-height:0;}
+      #circuit-2d{height:330px;}
+      .hero-terminal-hud{position:static;width:min(480px,calc(100% - 3rem));margin:0 auto 3rem;}
+      .scroll-hint{display:none;}
       .stats-bar{grid-template-columns:1fr 1fr;}
       .about-grid,.skills-grid,.contact-grid{grid-template-columns:1fr;}
       .bento{grid-template-columns:1fr;}
@@ -696,7 +753,7 @@
     <div class="contact-grid">
       <div class="fade-up">
         <h2 class="contact-h2">Let's build <em class="gt" style="font-style:italic;font-family:var(--serif)">something real</em></h2>
-        <p class="contact-p">Open to graduate research opportunities, internships, and full-time roles in embedded firmware and digital hardware design. Based in Ottawa — open to remote or relocation.</p>
+        <p class="contact-p">Actively seeking new-grad and entry-level embedded firmware roles — bare-metal C, ARM Cortex-M, FreeRTOS, and IoT systems. Based in Ottawa and open to relocation across Canada.</p>
         <div class="contact-links">
           <a href="mailto:ka.patelshrutik37@gmail.com" class="clink">
             <div class="clink-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
