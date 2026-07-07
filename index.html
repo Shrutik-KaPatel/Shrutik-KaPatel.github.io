@@ -186,7 +186,7 @@
     .c-cmt{color:#3a4560;}.c-kw{color:var(--primary);}.c-type{color:#7dd3fc;}.c-str{color:#86efac;}.c-num{color:#fcd34d;}.c-pp{color:#c084fc;}
 
     /* PROJECTS */
-    #projects{padding:5.5rem 0;background:linear-gradient(180deg,#030712 0%,#070d1a 50%,#030712 100%);position:relative;}
+    #projects{padding:5.5rem 0;background:linear-gradient(180deg,rgba(3,7,18,.5) 0%,rgba(7,13,26,.45) 50%,rgba(3,7,18,.5) 100%);position:relative;}
     #projects::before,#projects::after{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.2),transparent);}
     #projects::before{top:0;}#projects::after{bottom:0;}
     .proj-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:3.5rem;flex-wrap:wrap;}
@@ -302,7 +302,7 @@
 
     #hero{position:relative;z-index:2;grid-template-columns:6fr 6fr;}
     .hero-content{max-width:600px;}
-    #circuit-2d{width:100%;height:560px;display:block;}
+    #chip-journey{position:fixed;inset:0;z-index:1;pointer-events:none;}
     .hero-right{position:relative;}
     .hero-terminal-hud{position:absolute;bottom:5rem;right:8rem;width:320px;z-index:3;}
     .hero-terminal-hud .terminal{box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 40px rgba(0,212,255,.07);}
@@ -337,9 +337,24 @@
       body{cursor:auto;}
       #cur,#cur-r{display:none;}
     }
+    /* === CHIP JOURNEY ZONES (desktop): content alternates sides, chip takes the other === */
+    #finale{height:92vh;pointer-events:none;}
+    @media(min-width:1025px){
+      .stats-bar{grid-template-columns:1fr 1fr;width:min(660px,56%);margin-right:auto;border-right:1px solid var(--border);}
+      .stats-bar .stat:nth-child(even){border-right:none;}
+      .stats-bar .stat:nth-child(-n+2){border-bottom:1px solid var(--border);}
+      #about .about-grid{width:min(660px,56%);margin-left:auto;grid-template-columns:1fr;gap:3rem;}
+      #projects .proj-intro,#projects .bento,#projects .gh-btn{width:min(700px,58%);margin-right:auto;}
+      #projects .bento{grid-template-columns:1fr;}
+      #projects .bento>[style*="grid-column"]{grid-column:span 1!important;}
+      #skills .skills-grid{width:min(660px,56%);margin-left:auto;grid-template-columns:1fr;gap:3rem;}
+      #experience .exp-card{margin-right:auto;}
+      #lab-notes .lab-inner{width:min(660px,56%);margin-left:auto;flex-direction:column;align-items:flex-start;gap:1.6rem;}
+      #contact .contact-grid{width:min(700px,58%);margin-right:auto;grid-template-columns:1fr;gap:3rem;}
+    }
     @media(max-width:1024px){
+      #finale{height:50vh;}
       #hero{grid-template-columns:1fr;gap:2rem;padding:5.5rem 1.5rem 1rem;min-height:0;}
-      #circuit-2d{height:330px;}
       .hero-terminal-hud{position:static;width:min(480px,calc(100% - 3rem));margin:0 auto 3rem;}
       .scroll-hint{display:none;}
       .stats-bar{grid-template-columns:1fr 1fr;}
@@ -359,6 +374,7 @@
 <div id="cur"></div>
 <div id="cur-r"></div>
 <canvas id="bg-canvas"></canvas>
+<canvas id="chip-journey" aria-label="Holographic chip that travels down the page, assembling as you scroll"></canvas>
 
 <nav>
   <a href="#hero" class="logo"><div class="logo-box">#</div>SKP</a>
@@ -395,9 +411,7 @@
       <p class="hero-loc fade-up d3">Ottawa, Canada &nbsp;·&nbsp; Open to Relocation</p>
     </div>
 
-    <div class="hero-right fade-up d1">
-      <canvas id="circuit-2d" aria-label="Animated circuit radiating from a processor"></canvas>
-    </div>
+    <div class="hero-right fade-up d1" aria-hidden="true"></div>
   </div>
 
   <div class="hero-terminal-hud fade-up d2">
@@ -746,6 +760,9 @@
 
 <canvas class="wave-divider" data-wave="sine"></canvas>
 
+<!-- FINALE — chip showcase stage -->
+<section id="finale" aria-hidden="true"></section>
+
 <!-- CONTACT -->
 <section id="contact">
   <div class="container">
@@ -884,242 +901,441 @@ window.addEventListener('scroll',()=>{
 <script>
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ===== PCB CIRCUIT — orthogonal, thin, hollow vias ===== */
+/* ===== CHIP JOURNEY v3 — bright hologram, detailed parts, ignition heartbeat ===== */
 (function(){
-  const cv = document.getElementById('circuit-2d');
+  const cv = document.getElementById('chip-journey');
   if(!cv) return;
   const ctx = cv.getContext('2d');
-  let W,H,DPR,traces=[],chip={},mouse={x:-999,y:-999};
 
-  // Palette: cyan dominant, purple accent, orange accent (matches reference)
-  const CYAN='#00D4FF', PURPLE='#8A4FFF', ORANGE='#FF4500';
-  const PAL=[CYAN,CYAN,CYAN,'#1AAFFF',PURPLE,'#6633FF',ORANGE];
-
-  function build(){
-    DPR=Math.min(devicePixelRatio,2);
-    W=cv.clientWidth; H=cv.clientHeight;
-    cv.width=W*DPR; cv.height=H*DPR;
+  let W, H, DPR, MOBILE;
+  function resize(){
+    DPR = Math.min(devicePixelRatio, 2);
+    W = innerWidth; H = innerHeight;
+    MOBILE = W < 1025;
+    cv.width = W*DPR; cv.height = H*DPR;
     ctx.setTransform(DPR,0,0,DPR,0,0);
-    chip={x:W*.5,y:H*.5,w:Math.min(W,H)*.32,h:Math.min(W,H)*.32};
-    buildTraces();
+    buildTimeline();
   }
 
-  function buildTraces(){
-    traces=[];
-    const cx=chip.x, cy=chip.y, cw=chip.w, ch=chip.h;
-    // spawn points on all 4 chip edges
-    const origins=[];
-    const N=9;
-    for(let i=0;i<N;i++){
-      const t=(i+.5)/N;
-      origins.push({x:cx-cw/2, y:cy-ch/2+t*ch, dx:-1, dy:0}); // left
-      origins.push({x:cx+cw/2, y:cy-ch/2+t*ch, dx: 1, dy:0}); // right
-      origins.push({x:cx-cw/2+t*cw, y:cy-ch/2, dx:0, dy:-1}); // top
-      origins.push({x:cx-cw/2+t*cw, y:cy+ch/2, dx:0, dy: 1}); // bottom
+  function sprite(core, mid){
+    const c = document.createElement('canvas'); c.width = c.height = 32;
+    const g = c.getContext('2d');
+    const gr = g.createRadialGradient(16,16,0,16,16,16);
+    gr.addColorStop(0,  core);
+    gr.addColorStop(.28, mid);
+    gr.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = gr; g.fillRect(0,0,32,32);
+    return c;
+  }
+  const SP = [
+    sprite('rgba(200,246,255,1)','rgba(0,212,255,.8)'),     // cyan, white-hot core
+    sprite('rgba(255,214,170,1)','rgba(255,106,43,.85)'),   // orange, hot core
+    sprite('rgba(255,255,255,1)','rgba(210,240,255,.8)')    // white
+  ];
+
+  /* ---------- particle cloud, tagged by piece ---------- */
+  const P = [];
+  let PC = 0;
+  function pt(x,y,z,c=0,sz=1){ P.push({x,y,z,pc:PC,c,sz,d:Math.hypot(x,y),ph:Math.random()*6.283,sp:.6+Math.random()*1.5}); }
+  function edge(x0,y0,x1,y1,z,st,c,sz){
+    for(let x=x0;x<=x1;x+=st){ pt(x,y0,z,c,sz); pt(x,y1,z,c,sz); }
+    for(let y=y0+st;y<y1;y+=st){ pt(x0,y,z,c,sz); pt(x1,y,z,c,sz); }
+  }
+  function edgeYZ(x,y0,z0,y1,z1,st,c,sz){                    // vertical face outline (connector openings)
+    for(let y=y0;y<=y1;y+=st){ pt(x,y,z0,c,sz); pt(x,y,z1,c,sz); }
+    for(let z=z0+st;z<z1;z+=st){ pt(x,y0,z,c,sz); pt(x,y1,z,c,sz); }
+  }
+  function fillR(x0,y0,x1,y1,z,n,c,sz){
+    for(let i=0;i<n;i++) pt(x0+Math.random()*(x1-x0), y0+Math.random()*(y1-y0), z, c, sz);
+  }
+  function vline(x,y,z0,z1,st,c,sz){ for(let z=z0;z<=z1;z+=st) pt(x,y,z,c,sz); }
+  function ring(x,y,z,r,n,c,sz){
+    for(let i=0;i<n;i++){ const a=i/n*6.283; pt(x+r*Math.cos(a), y+r*Math.sin(a), z, c, sz); }
+  }
+  function dots(path,z,st,c,sz){
+    for(let k=1;k<path.length;k++){
+      const [ax,ay]=path[k-1],[bx,by]=path[k];
+      const len=Math.hypot(bx-ax,by-ay), n=Math.max(1,Math.round(len/st));
+      for(let i=0;i<=n;i++) pt(ax+(bx-ax)*i/n, ay+(by-ay)*i/n, z, c, sz);
     }
+  }
+  function boxWire(x0,y0,x1,y1,z0,z1,st,c,sz){
+    edge(x0,y0,x1,y1,z1,st,c,sz);
+    edge(x0,y0,x1,y1,z0,st*2,c,sz*.7);
+    [[x0,y0],[x1,y0],[x0,y1],[x1,y1]].forEach(([vx,vy])=>vline(vx,vy,z0,z1,2.5,c,sz*.85));
+  }
+  function bracket(x,y,z,dx,dy,len,c,sz){                    // corner L-mark
+    dots([[x,y],[x+dx*len,y]],z,3,c,sz);
+    dots([[x,y],[x,y+dy*len]],z,3,c,sz);
+  }
 
-    origins.forEach(o=>{
-      const col=PAL[Math.floor(Math.random()*PAL.length)];
-      const fat=Math.random()<.18;
-      let px=o.x, py=o.y;
-      const pts=[{x:px,y:py}];
+  /* P1 — PCB substrate */
+  PC = 1;
+  edge(-125,-90,125,90,10,3.6,0,1.4);
+  edge(-119,-84,119,84,10,7,0,.8);                           // inset panel line
+  edge(-125,-90,125,90, 0, 8, 0, .75);
+  [[-125,-90],[125,-90],[-125,90],[125,90]].forEach(([x,y])=>vline(x,y,0,10,2,0,1));
+  fillR(-125,-90,125,90,10, 240, 0, .5);
+  [[-111,-76],[111,-76],[-111,76],[111,76]].forEach(([x,y])=>{ ring(x,y,10,6,12,0,1.15); ring(x,y,10,3,7,0,.8); });
+  bracket(-125,-90,10, 1, 1, 16, 0, 1.3); bracket(125,-90,10,-1, 1, 16, 0, 1.3);
+  bracket(-125, 90,10, 1,-1, 16, 0, 1.3); bracket(125, 90,10,-1,-1, 16, 0, 1.3);
 
-      // Segment 1: long straight outward (horizontal or vertical)
-      const run1=70+Math.random()*130;
-      px+=o.dx*run1; py+=o.dy*run1;
-      pts.push({x:px,y:py});
+  /* P0 — inner copper plane */
+  PC = 0;
+  edge(-115,-80,115,80, 0, 4.2, 0, 1.15);
+  edge(-115,-80,115,80,-8, 9, 0, .7);
+  [[-115,-80],[115,-80],[-115,80],[115,80]].forEach(([x,y])=>vline(x,y,-8,0,2.5,0,.85));
+  fillR(-115,-80,115,80, 0, 190, 0, .55);
+  dots([[-105,-70],[105,70]],0,9,0,.6);                       // hatch
+  dots([[-105,0],[0,70]],0,9,0,.6);
+  dots([[0,-70],[105,0]],0,9,0,.6);
+  [[-80,-45],[-30,-58],[30,-40],[75,-55],[-70,30],[-15,50],[45,42],[88,25],[0,0],[-95,60]]
+    .forEach(([x,y],i)=>{ ring(x,y,0,3.5,8, i%4?0:1, 1.1); pt(x,y,0, i%4?0:1, 1.3); });
 
-      // Single 90° turn: if was horizontal → go vertical, and vice versa
-      if(Math.random()<.85){
-        const perp=(Math.random()<.5?1:-1);
-        const nx=o.dy!==0?1:0, ny=o.dx!==0?1:0; // perpendicular axes
-        const run2=30+Math.random()*90;
-        px+=nx*perp*run2; py+=ny*perp*run2;
-        pts.push({x:px,y:py});
-        // optional third segment back along original direction
-        if(Math.random()<.45){
-          const run3=25+Math.random()*70;
-          px+=o.dx*run3; py+=o.dy*run3;
-          pts.push({x:px,y:py});
-        }
-      }
+  /* P2 — traces + pads etched onto the board */
+  PC = 2;
+  for(let i=0;i<9;i++){ const p=-34+i*8.5;
+    pt(p,-43,10,2,1.4); pt(p,43,10,2,1.4); pt(-43,p,10,2,1.4); pt(43,p,10,2,1.4);
+  }
+  const TR = [
+    [[-46,-15],[-72,-15],[-84,-27],[-84,-52]],
+    [[46,-8],[58,-8],[66,-16],[66,-42]],
+    [[46,18],[78,18],[93,33]],
+    [[-20,46],[-20,52],[-34,66],[-63,66]],
+    [[14,46],[14,58],[30,58]],
+    [[-46,8],[-66,8],[-78,20],[-78,44],[-88,54]],
+    [[28,-46],[28,-58],[44,-58],[54,-68]],
+    [[-8,-46],[-8,-62],[-24,-62],[-34,-72]]
+  ];
+  TR.forEach(p=>{ dots(p,10,4.2,0,1); const e2=p[p.length-1]; pt(e2[0],e2[1],10,2,1.3); ring(e2[0],e2[1],10,2.6,6,0,.8); });
 
-      const cum=[0]; let tot=0;
-      for(let k=1;k<pts.length;k++){tot+=Math.hypot(pts[k].x-pts[k-1].x,pts[k].y-pts[k-1].y);cum.push(tot);}
-      traces.push({pts,cum,tot,col,fat,
-        pulse:-Math.random()*tot,
-        speed:60+Math.random()*80,
-        flash:0,hot:0});
+  /* P3 — MCU package: QFP with leads to pads */
+  PC = 3;
+  boxWire(-37,-37,37,37,10,24,3.2,0,1.35);
+  edge(-29,-29,29,29,24,4.5,0,.9);                            // die-ring on lid
+  pt(-30,-30,24,1,1.6);                                       // pin-1 index (orange)
+  for(let i=0;i<9;i++){ const p=-34+i*8.5;                     // gull-wing leads on all 4 sides
+    [[41,p],[p,41],[-41,p],[p,-41]].forEach(([lx,ly])=>{
+      pt(lx,ly,17,2,1); pt(lx*1.03,ly*1.03,13,0,.9);
     });
   }
 
-  build(); addEventListener('resize',build);
-  cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
-  cv.addEventListener('mouseleave',()=>{mouse.x=-999;mouse.y=-999;});
+  /* P4 — silicon die (orange core) */
+  PC = 4;
+  fillR(-24,-24,24,24,24, 230, 1, 1.1);
+  fillR(-13,-13,13,13,17, 46, 1, .95);
+  edge(-24,-24,24,24,24,4,1,1.2);
 
-  function posAt(tr,d){
-    d=Math.max(0,Math.min(d,tr.tot));
-    for(let k=1;k<tr.cum.length;k++){
-      if(d<=tr.cum[k]){
-        const t=(d-tr.cum[k-1])/((tr.cum[k]-tr.cum[k-1])||1);
-        return{x:tr.pts[k-1].x+(tr.pts[k].x-tr.pts[k-1].x)*t,
-               y:tr.pts[k-1].y+(tr.pts[k].y-tr.pts[k-1].y)*t};
-      }
+  /* P5 — crystal: metal can with terminals */
+  PC = 5;
+  boxWire(-96,40,-64,58,10,19,4,0,1);
+  edge(-92,43,-68,55,19,4,0,.85);
+  pt(-96,49,13,2,1.3); pt(-64,49,13,2,1.3);                   // end terminals
+
+  /* P6 — capacitors: body + white end stripes */
+  PC = 6;
+  boxWire(60,-62,74,-52,10,17,3.4,0,1);
+  pt(60,-57,13,2,1.3); pt(74,-57,13,2,1.3);
+  boxWire(82,-48,96,-38,10,17,3.4,0,1);
+  pt(82,-43,13,2,1.3); pt(96,-43,13,2,1.3);
+
+  /* P7 — USB connector (shell + opening) + LED */
+  PC = 7;
+  boxWire(93,20,125,46,10,21,4,0,1);
+  edge(99,26,119,40,21,3.6,2,.95);
+  edgeYZ(125,24,12,42,19,2.4,2,1);                            // port opening on board edge
+  fillR(52,54,61,62,14, 14, 2, 1.1);
+  ring(56.5,58,14,4.5,8,0,.9);
+
+  /* P8 — firmware pane */
+  PC = 8;
+  edge(-100,-70,100,70,10,4.2,0,1.1);
+  bracket(-100,-70,10,1,1,14,0,1.3); bracket(100,-70,10,-1,1,14,0,1.3);
+  bracket(-100,70,10,1,-1,14,0,1.3); bracket(100,70,10,-1,-1,14,0,1.3);
+  for(let gx=-86;gx<=86;gx+=14) dots([[gx,-58],[gx,58]],10,11,0,.5);
+  for(let gy=-56;gy<=56;gy+=14) dots([[-88,gy],[88,gy]],10,11,0,.5);
+  dots([[-80,-44],[6,-44]],10,4,0,1.1);
+  dots([[-80,-26],[-20,-26]],10,4,0,1.1);
+  dots([[-80,-8],[-6,-8]],10,4,1,1.1);
+  dots([[-80,10],[-36,10]],10,4,0,1.1);
+  pt(88,-58,10,1,1.4);
+
+  const NP = 9;
+  const PIECES = [
+    {sx:-190, sy: 110, sz:-130, w0:.03, w1:.16},
+    {sx:   0, sy: -30, sz:  90, w0:.00, w1:.10},
+    {sx: 150, sy:-120, sz:  90, w0:.14, w1:.28},
+    {sx:-180, sy:-140, sz: 170, w0:.24, w1:.40},
+    {sx: 220, sy:  70, sz: 240, w0:.36, w1:.50},
+    {sx:-240, sy: 160, sz:  60, w0:.46, w1:.58},
+    {sx: 260, sy:-180, sz: 120, w0:.54, w1:.66},
+    {sx:-140, sy: 240, sz: 160, w0:.62, w1:.74},
+    {sx:  70, sy: -70, sz: 290, w0:.78, w1:.97}
+  ];
+  const BOBPH = [0,0,.9,1.7,2.4,3.1,3.9,4.6,5.3];
+
+  const callouts = [
+    {pc:8, x: 95, y:-65, z:10, dot:0, label:'FIRMWARE',  detail:'where code meets hardware'},
+    {pc:4, x:  0, y:  0, z:24, dot:1, label:'MCU',       detail:'bare-metal at heart'},
+    {pc:1, x:125, y:-15, z: 6, dot:0, label:'HARDWARE',  detail:'built & debugged by hand'},
+    {pc:0, x:-112,y: 65, z:-4, dot:0, label:'PROTOCOLS', detail:'from silicon to cloud'}
+  ];
+
+  /* ---------- timeline ---------- */
+  let KEYS = [], uFin = .9;
+  function centerU(el, docH){
+    if(!el) return null;
+    const r = el.getBoundingClientRect();
+    return Math.min(1, Math.max(0, (r.top + scrollY + r.height/2 - innerHeight/2) / docH));
+  }
+  function buildTimeline(){
+    const docH = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const q = s => document.querySelector(s);
+    const uStats = centerU(q('.stats-bar'), docH);
+    const uAbout = centerU(q('#about'), docH);
+    const pr = q('#projects');
+    let uP0=null, uP1=null;
+    if(pr){
+      const top = pr.getBoundingClientRect().top + scrollY;
+      uP0 = Math.min(1, Math.max(0,(top + pr.offsetHeight*0.22 - innerHeight/2)/docH));
+      uP1 = Math.min(1, Math.max(0,(top + pr.offsetHeight*0.78 - innerHeight/2)/docH));
     }
-    return tr.pts[tr.pts.length-1];
+    const uSkills = centerU(q('#skills'), docH);
+    const uExp    = centerU(q('#experience'), docH);
+    const uLab    = centerU(q('#lab-notes'), docH);
+    const uF      = centerU(q('#finale'), docH);
+    const uCon    = centerU(q('#contact'), docH);
+    uFin = uF !== null ? uF : .9;
+
+    const raw = [
+      [0,       .74, .50, 1.00, 0.0,  .95],
+      [uStats,  .74, .52, .90,  1.1, 1.22],
+      [uAbout,  .22, .47, .82,  2.4,  .65],
+      [uP0,     .78, .50, .82,  3.9, 1.08],
+      [uP1,     .70, .50, .98,  5.8,  .80],
+      [uSkills, .24, .45, .88,  7.2, 1.18],
+      [uExp,    .76, .50, 1.02, 8.5,  .50],
+      [uLab,    .24, .50, .86,  9.5,  .90],
+      [uF,      .50, .47, 1.32, 10.6, .95],
+      [uCon,    .76, .50, .94,  10.6, .95],
+      [1.001,   .74, .50, .92,  10.6, .95]
+    ].filter(k => k[0] !== null);
+    raw.sort((a,b)=>a[0]-b[0]);
+    KEYS = [];
+    let lastU = -1;
+    raw.forEach(k=>{
+      const u = Math.max(k[0], lastU + 1e-4);
+      KEYS.push({u, x:k[1], y:k[2], sc:k[3], spin:k[4], tilt:k[5]});
+      lastU = u;
+    });
+  }
+  const smooth = v => v*v*(3-2*v);
+  const clamp01 = v => Math.min(1, Math.max(0, v));
+  const wrapPi = a => ((a+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI;
+  function sample(u){
+    if(u <= KEYS[0].u) return {...KEYS[0]};
+    if(u >= KEYS[KEYS.length-1].u) return {...KEYS[KEYS.length-1]};
+    let i=0; while(KEYS[i+1].u < u) i++;
+    const a=KEYS[i], b=KEYS[i+1];
+    const v = smooth((u-a.u)/(b.u-a.u)), L=(p,q)=>p+(q-p)*v;
+    return {x:L(a.x,b.x), y:L(a.y,b.y), sc:L(a.sc,b.sc), spin:L(a.spin,b.spin), tilt:L(a.tilt,b.tilt)};
   }
 
-  let last=performance.now(),t=0,sloganChars=0,sloganDone=false,chipHot=0;
-  const SLOGAN='power is building_';
+  /* ---------- camera ---------- */
+  let cx, cy, S, cosT, sinT, cosF, sinF;
+  function proj(x,y,z){
+    const x1 = x*cosT - y*sinT, y1 = x*sinT + y*cosT;
+    const sy = y1*sinF - z*cosF;
+    const d  = y1*cosF + z*sinF;
+    const pf = 1/(1 + d*0.0016);
+    return [cx + x1*S*pf, cy + sy*S*pf, pf];
+  }
+  function planeText(txt,x,y,z,size,rgba,weight,glow){
+    const p0=proj(x,y,z), pu=proj(x+1,y,z), pv=proj(x,y+1,z);
+    ctx.save();
+    ctx.transform(pu[0]-p0[0],pu[1]-p0[1],pv[0]-p0[0],pv[1]-p0[1],p0[0],p0[1]);
+    ctx.font=(weight||500)+' '+size+'px "JetBrains Mono",monospace';
+    ctx.textAlign='center';
+    if(glow){ ctx.shadowColor=glow[0]; ctx.shadowBlur=glow[1]; }
+    ctx.fillStyle=rgba; ctx.fillText(txt,0,0);
+    ctx.restore();
+  }
+
+  /* readable resting angle: front + side + top visible, SKP upright */
+  const SPIN_TARGET = -0.45;
+  const HEART = 2.4;                                 // heartbeat period, seconds
+
+  let uS=0, mx=0, my=0, t=0, prev=performance.now();
+  let spinIdle=0, aliveT=null, firstFrame=true;
+  addEventListener('resize', resize);
+  addEventListener('load', buildTimeline);
+  if(matchMedia('(hover:hover)').matches){
+    addEventListener('mousemove', ev=>{
+      mx = ev.clientX/innerWidth - .5;
+      my = ev.clientY/innerHeight - .5;
+    }, {passive:true});
+  }
+  resize();
+
+  const pe = new Array(NP).fill(1);
+  const pa = new Array(NP).fill(1);
+  const ox = new Array(NP).fill(0), oy = new Array(NP).fill(0), oz = new Array(NP).fill(0);
 
   function frame(now){
     requestAnimationFrame(frame);
-    const dt=Math.min((now-last)/1000,.05);last=now;t+=dt;
-    ctx.clearRect(0,0,W,H);
+    const dt = Math.min((now-prev)/1000,.05); prev = now; t += dt;
 
-    // background: deep blue-purple atmosphere matching reference
-    const bg=ctx.createRadialGradient(W*.62,H*.45,0,W*.62,H*.45,W*.72);
-    bg.addColorStop(0,'rgba(10,20,60,.5)');
-    bg.addColorStop(.5,'rgba(5,8,28,.35)');
+    const docH = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const uT = clamp01(scrollY/docH);
+    uS += (uT-uS)*Math.min(1, dt*(reduceMotion?30:3.4));
+
+    const st = sample(uS);
+    const ju = clamp01(uS/uFin);
+
+    /* piece assembly */
+    let seated = 0;
+    for(let i=0;i<NP;i++){
+      const pc = PIECES[i];
+      const raw = 1 - clamp01((ju-pc.w0)/(pc.w1-pc.w0));
+      pe[i] = smooth(raw);
+      if(pe[i] < .02) seated++;
+      pa[i] = clamp01((ju-(pc.w0-.07))/.07);
+      const k = Math.pow(pe[i], 1.4);
+      const arc = pe[i]*1.5;
+      const ca = Math.cos(arc), sa = Math.sin(arc);
+      ox[i] = (pc.sx*ca - pc.sy*sa)*k;
+      oy[i] = (pc.sx*sa + pc.sy*ca)*k;
+      oz[i] = pc.sz*k + (reduceMotion?0:Math.sin(t*1.3+BOBPH[i])*4*pe[i]);
+    }
+    const pct = Math.round(clamp01(1 - pe.reduce((s,v)=>s+v,0)/NP)*100);
+
+    /* ignition: the die seats -> the chip comes alive */
+    if(pe[4] < .05 && aliveT === null) aliveT = firstFrame ? t-20 : t;
+    firstFrame = false;
+    const alive = aliveT !== null;
+    const age = alive ? t-aliveT : 0;
+    const beat = alive ? (age%HEART)/HEART : 0;
+    const hb = alive ? Math.exp(-beat*4.5) : 0;                 // heartbeat spike
+    const rippleR = beat*310;
+
+    /* camera: spin lands smoothly on the readable hero angle at the finale */
+    const B = smooth(clamp01((ju-.86)/.14));
+    if(!reduceMotion) spinIdle += dt*0.09*(1-B);
+    let spin = st.spin + spinIdle + mx*0.4*(1-.8*B);
+    spin += wrapPi(SPIN_TARGET - spin)*B;
+    const tilt = Math.min(1.45, Math.max(.2, st.tilt + my*0.18*(1-.7*B) + (reduceMotion?0:Math.sin(t*.31)*.05*(1-B))));
+    cosT=Math.cos(spin); sinT=Math.sin(spin);
+    cosF=Math.cos(tilt); sinF=Math.sin(tilt);
+    const wob = reduceMotion?0:(1-.7*B);
+    cx = (MOBILE?.5:st.x)*W + mx*16 + Math.sin(t*.5)*9*wob;
+    cy = st.y*H + my*12 + Math.cos(t*.37)*7*wob;
+    S  = Math.min(W,H)/620 * st.sc * (MOBILE?.72:1);
+    const DIM = MOBILE ? .42 : 1;
+
+    ctx.clearRect(0,0,W,H);
+    const bg = ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(W,H)*.55*st.sc);
+    bg.addColorStop(0,'rgba(0,90,155,.16)');
+    bg.addColorStop(.6,'rgba(0,35,80,.07)');
     bg.addColorStop(1,'rgba(0,0,0,0)');
     ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
-    // warm accent right side
-    const og=ctx.createRadialGradient(W*.88,H*.75,0,W*.88,H*.75,W*.45);
-    og.addColorStop(0,'rgba(180,40,0,.12)');
-    og.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.fillStyle=og; ctx.fillRect(0,0,W,H);
 
-    // mouse parallax offset
-    const inCanvas = mouse.x>0 && mouse.x<W && mouse.y>0 && mouse.y<H;
-    const ox = inCanvas ? (mouse.x-W/2)*.018 : 0;
-    const oy = inCanvas ? (mouse.y-H/2)*.018 : 0;
-    ctx.save(); ctx.translate(ox,oy);
-    ctx.lineCap='square'; ctx.lineJoin='miter'; // sharp PCB corners
+    ctx.globalCompositeOperation='lighter';
 
-    traces.forEach(tr=>{
-      const end=tr.pts[tr.pts.length-1],st=tr.pts[0];
-      const near=Math.min(
-        Math.hypot(st.x-mouse.x,st.y-mouse.y),
-        Math.hypot(end.x-mouse.x,end.y-mouse.y));
-      tr.hot+=(( near<120?1:0 )-tr.hot)*dt*5;
+    /* ignition flash */
+    if(alive && age < .8){
+      const f = 1-age/.8;
+      const p0 = proj(0,0,40);
+      const fg = ctx.createRadialGradient(p0[0],p0[1],0,p0[0],p0[1],340*S);
+      fg.addColorStop(0,'rgba(255,140,60,'+(.55*f*DIM)+')');
+      fg.addColorStop(.4,'rgba(255,106,43,'+(.22*f*DIM)+')');
+      fg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
+    }
 
-      // thin trace line
-      ctx.strokeStyle=tr.col;
-      ctx.lineWidth=tr.fat?1.8:1.1;
-      ctx.globalAlpha=0.55+tr.hot*.35;
-      ctx.shadowColor=tr.col; ctx.shadowBlur=tr.hot*12;
-      ctx.beginPath(); ctx.moveTo(st.x,st.y);
-      for(let k=1;k<tr.pts.length;k++) ctx.lineTo(tr.pts[k].x,tr.pts[k].y);
-      ctx.stroke();
+    const sweep = ((t*85)%(H+200))-100;
+    const paneFade = .25+.75*pe[8];
 
-      // hollow circle via at end (like the reference)
-      ctx.globalAlpha=0.75+tr.hot*.25;
-      ctx.shadowBlur=tr.hot*10;
-      ctx.beginPath(); ctx.arc(end.x,end.y,4.5+tr.flash*2.5,0,7);
-      ctx.fillStyle='#030712'; ctx.fill();
-      ctx.lineWidth=1.5; ctx.strokeStyle=tr.col; ctx.stroke();
-      tr.flash=Math.max(0,tr.flash-dt*4);
-
-      // comet pulse — thin bright line streak
-      if(!reduceMotion){
-        tr.pulse+=tr.speed*dt*(1+tr.hot);
-        if(tr.pulse>tr.tot+30){tr.pulse=-60-Math.random()*180;tr.flash=.8;}
-        if(tr.pulse>0){
-          const TAIL=36,STEPS=6;
-          ctx.shadowBlur=14+tr.hot*8;
-          for(let s=0;s<STEPS;s++){
-            const d1=tr.pulse-s*(TAIL/STEPS), d0=d1-TAIL/STEPS;
-            if(d1<=0) break;
-            const p0=posAt(tr,d0),p1=posAt(tr,d1);
-            const a=(1-s/STEPS);
-            ctx.globalAlpha=a*.85;
-            ctx.strokeStyle=s===0?'rgba(240,252,255,.98)':tr.col;
-            ctx.lineWidth=(tr.fat?2.4:1.8)*a+.4;
-            ctx.beginPath(); ctx.moveTo(p0.x,p0.y); ctx.lineTo(p1.x,p1.y); ctx.stroke();
-          }
+    for(let i=0;i<P.length;i++){
+      const p = P[i];
+      if(pa[p.pc] <= 0) continue;
+      const pr = proj(p.x+ox[p.pc], p.y+oy[p.pc], p.z+oz[p.pc]);
+      let a = reduceMotion? .8 : .45+.5*(.5+.5*Math.sin(t*p.sp+p.ph));
+      a *= 1 + Math.max(0, 1-Math.abs(pr[1]-sweep)/34)*.8;
+      a *= pa[p.pc] * (.75+.25*pr[2]) * DIM;
+      if(p.pc===8) a *= paneFade;
+      if(p.pc===4 && alive) a *= .75+.55*hb;                    // die breathes
+      const d = Math.max(2.2, p.sz*5.2*S*pr[2]);
+      ctx.globalAlpha = Math.min(1,a);
+      ctx.drawImage(SP[p.c], pr[0]-d/2, pr[1]-d/2, d, d);
+      /* orange life-pulse rippling across seated geometry */
+      if(alive && pe[p.pc] < .05){
+        const db = 1-Math.abs(p.d-rippleR)/26;
+        if(db > 0){
+          ctx.globalAlpha = Math.min(1, db*.85*DIM);
+          ctx.drawImage(SP[1], pr[0]-d*.8, pr[1]-d*.8, d*1.6, d*1.6);
         }
       }
-      ctx.globalAlpha=1; ctx.shadowBlur=0;
-    });
-
-    // ---- CHIP ----
-    ctx.save(); ctx.translate(-ox*.3,-oy*.3); // chip moves less = depth
-    const cw=chip.w,ch=chip.h,cx=chip.x-cw/2,cy=chip.y-ch/2;
-    const dM=Math.hypot(mouse.x-chip.x,mouse.y-chip.y);
-    chipHot+=(((dM<cw*.8)?1:0)-chipHot)*dt*5;
-
-    function pkgPath(pad){const p=pad||0,C=cw*.1;
-      ctx.beginPath();
-      ctx.moveTo(cx+C-p*.4,cy-p); ctx.lineTo(cx+cw-C+p*.4,cy-p);
-      ctx.lineTo(cx+cw+p,cy+C-p*.4); ctx.lineTo(cx+cw+p,cy+ch-C+p*.4);
-      ctx.lineTo(cx+cw-C+p*.4,cy+ch+p); ctx.lineTo(cx+C-p*.4,cy+ch+p);
-      ctx.lineTo(cx-p,cy+ch-C+p*.4); ctx.lineTo(cx-p,cy+C-p*.4);
-      ctx.closePath();}
-
-    // metallic pins
-    ctx.fillStyle='#2c3e58';
-    const PIN=7,PW=cw/17;
-    for(let i=0;i<PIN;i++){
-      const o=cx+cw*.14+i*(cw*.72/(PIN-1))-PW/2;
-      ctx.fillRect(o,cy-7,PW,7); ctx.fillRect(o,cy+ch,PW,7);
-      const o2=cy+ch*.14+i*(ch*.72/(PIN-1))-PW/2;
-      ctx.fillRect(cx-7,o2,7,PW); ctx.fillRect(cx+cw,o2,7,PW);
     }
-    // body
-    const bodyG=ctx.createLinearGradient(cx,cy,cx+cw,cy+ch);
-    bodyG.addColorStop(0,'#0a1120'); bodyG.addColorStop(.5,'#04070e'); bodyG.addColorStop(1,'#150d08');
-    // dual glow shadow
-    ctx.save();
-    ctx.shadowColor='rgba(0,200,255,'+(.7+chipHot*.3)+')'; ctx.shadowBlur=20+chipHot*14; ctx.shadowOffsetX=-6; ctx.shadowOffsetY=-6;
-    ctx.fillStyle='#04070e'; pkgPath(); ctx.fill();
-    ctx.shadowColor='rgba(255,50,0,'+(.7+chipHot*.3)+')'; ctx.shadowBlur=20+chipHot*14; ctx.shadowOffsetX=6; ctx.shadowOffsetY=6;
-    pkgPath(); ctx.fill();
-    ctx.restore();
-    ctx.fillStyle=bodyG; pkgPath(); ctx.fill();
-    // rim: red-orange → amber → cyan
-    const rimG=ctx.createLinearGradient(cx,cy+ch,cx+cw,cy);
-    rimG.addColorStop(0,'rgba(255,30,0,'+(.9+chipHot*.1)+')');
-    rimG.addColorStop(.45,'rgba(255,100,0,'+(.8+chipHot*.2)+')');
-    rimG.addColorStop(.75,'rgba(255,160,30,'+(.65+chipHot*.2)+')');
-    rimG.addColorStop(1,'rgba(0,200,255,'+(.6+chipHot*.2)+')');
-    ctx.lineWidth=2.5; ctx.strokeStyle=rimG;
-    ctx.shadowColor='rgba(255,50,0,.65)'; ctx.shadowBlur=10+chipHot*8;
-    pkgPath(); ctx.stroke(); ctx.shadowBlur=0;
-    // inner frame + die
-    ctx.strokeStyle='rgba(120,150,190,.2)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.roundRect(cx+8,cy+8,cw-16,ch-16,6); ctx.stroke();
-    ctx.strokeStyle='rgba(0,210,255,.1)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.roundRect(cx+cw*.18,cy+ch*.16,cw*.64,ch*.5,4); ctx.stroke();
-    // gold pads
-    ctx.fillStyle='rgba(255,180,90,.5)';
-    const padN=6,padS=cw*.042;
-    for(let i=0;i<padN;i++){
-      const o=cx+cw*.2+i*(cw*.6/(padN-1))-padS/2;
-      ctx.fillRect(o,cy+10,padS,padS*.6); ctx.fillRect(o,cy+ch-10-padS*.6,padS,padS*.6);
-      const o2=cy+ch*.2+i*(ch*.6/(padN-1))-padS/2;
-      ctx.fillRect(cx+10,o2,padS*.6,padS); ctx.fillRect(cx+cw-10-padS*.6,o2,padS*.6,padS);
+    ctx.globalAlpha = 1;
+
+    /* markings ride their pieces; SKP glows with the heartbeat once alive */
+    if(pa[3]>0){
+      if(alive) planeText('SKP', ox[3], 2+oy[3], 24+oz[3], 26,
+        'rgba(255,'+Math.round(200-90*hb)+','+Math.round(150-100*hb)+','+(.55*hb*DIM)+')', 700,
+        ['rgba(255,106,43,.9)', 22]);
+      planeText('SKP', ox[3], 2+oy[3], 24+oz[3], 26, 'rgba(205,246,255,'+(.98*pa[3]*DIM)+')', 700);
     }
-    // pin-1 + notch
-    ctx.beginPath(); ctx.arc(cx+cw*.1+6,cy+ch-cw*.1-6,3,0,7); ctx.fillStyle='#FF4500'; ctx.fill();
-    ctx.fillStyle='#0d1424';
-    ctx.beginPath(); ctx.arc(cx+cw/2,cy+2,5,0,Math.PI); ctx.fill();
-    ctx.restore();
+    if(pa[2]>0) planeText('DESIGNED BY SKP \u00b7 REV A', 52+ox[2], 76+oy[2], 10+oz[2], 7.5, 'rgba(0,212,255,'+(.65*pa[2]*DIM)+')', 600);
+    if(pa[8]>0) planeText('while(1){ learn(); build(); }', ox[8], 34+oy[8], 10+oz[8], 9, 'rgba(150,232,255,'+(.8*paneFade*pa[8]*DIM)+')', 600);
 
-    // chip text
-    ctx.save(); ctx.translate(ox*.05,oy*.05);
-    ctx.textAlign='center';
-    ctx.fillStyle='#F0F4FF';
-    ctx.font='700 '+Math.round(cw*.26)+'px Fraunces, serif';
-    ctx.fillText('SKP', chip.x, chip.y+cw*.04);
-    if(!sloganDone){sloganChars+=dt*13;if(sloganChars>=SLOGAN.length){sloganChars=SLOGAN.length;sloganDone=true;}}
-    const shown=SLOGAN.slice(0,Math.floor(sloganChars));
-    ctx.fillStyle='#00E5FF';
-    ctx.font='500 '+Math.round(cw*.065)+'px "JetBrains Mono",monospace';
-    ctx.shadowColor='#00D4FF'; ctx.shadowBlur=10;
-    ctx.fillText(sloganDone&&Math.floor(t*2)%2?shown.slice(0,-1)+' ':shown, chip.x, chip.y+cw*.19);
-    ctx.shadowBlur=0; ctx.restore();
+    /* callouts chase flying components */
+    if(!MOBILE){
+      ctx.font='700 11px "JetBrains Mono",monospace';
+      const flick = .82+.18*Math.sin(t*7);
+      callouts.forEach(co=>{
+        const vis = pe[co.pc]*pa[co.pc];
+        if(vis < .06) return;
+        const pr2 = proj(co.x+ox[co.pc], co.y+oy[co.pc], co.z+oz[co.pc]);
+        const ax=pr2[0], ay=pr2[1];
+        const right = ax >= cx;
+        const ex = ax+(right?30:-30), ey = ay-24;
+        const lw = ctx.measureText(co.label).width;
+        const tx = right? ex+8 : ex-8-lw;
+        ctx.globalAlpha = vis*flick;
+        ctx.strokeStyle='rgba(0,212,255,.9)'; ctx.lineWidth=1;
+        ctx.beginPath();
+        ctx.moveTo(ax,ay); ctx.lineTo(ex,ey); ctx.lineTo(right?ex+lw+16:ex-lw-16,ey);
+        ctx.stroke();
+        ctx.fillStyle = co.dot?'rgba(255,106,43,1)':'rgba(0,212,255,1)';
+        ctx.beginPath(); ctx.arc(ax,ay,2.6,0,7); ctx.fill();
+        ctx.strokeStyle='rgba(0,212,255,.45)';
+        ctx.strokeRect(tx-5,ey-16,lw+10,20);
+        ctx.fillStyle='rgba(210,247,255,1)';
+        ctx.fillText(co.label,tx,ey-2);
+        ctx.font='400 9.5px "JetBrains Mono",monospace';
+        ctx.fillStyle='rgba(150,160,182,1)';
+        ctx.fillText(co.detail, right?tx:ex-8-ctx.measureText(co.detail).width, ey+13);
+        ctx.font='700 11px "JetBrains Mono",monospace';
+      });
+      ctx.globalAlpha = 1;
+    }
 
-    ctx.restore();
+    /* journey HUD */
+    const hy = H-52;
+    ctx.font='600 10px "JetBrains Mono",monospace';
+    ctx.fillStyle='rgba(0,212,255,.95)';
+    ctx.fillText('> CHIP.JOURNEY'+(Math.floor(t*2)%2?' _':''), 14, hy);
+    for(let i=0;i<12;i++){
+      ctx.fillStyle = i/12 < pct/100 ? 'rgba(0,212,255,.95)' : 'rgba(0,212,255,.2)';
+      ctx.fillRect(14+i*9, hy+8, 6, 8);
+    }
+    ctx.fillStyle='rgba(150,160,182,1)';
+    ctx.fillText('MODULES '+seated+'/'+NP, 126, hy+16);
+    ctx.fillStyle = alive ? 'rgba(255,106,43,'+(.6+.4*hb)+')' : 'rgba(80,90,112,.95)';
+    ctx.fillText(seated<NP ? (alive?'CORE ONLINE \u00b7 COLLECTING':'SCROLL \u25be COLLECTING COMPONENTS')
+                           : 'ASSEMBLY COMPLETE \u00b7 SYSTEM ALIVE', 14, hy+32);
+
+    ctx.globalCompositeOperation='source-over';
   }
   requestAnimationFrame(frame);
 })();
