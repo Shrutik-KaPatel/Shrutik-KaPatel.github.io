@@ -1069,19 +1069,6 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const a=VERTS[EDGES[i].a], b=VERTS[EDGES[i].b];
     EDM[i]=Math.hypot((a.x+b.x)/2,(a.y+b.y)/2);
   }
-  /* subdivide traces so pulses flow along them */
-  TRACES.forEach(tr=>{
-    tr.sub=[];
-    for(let k=1;k<tr.p.length;k++){
-      const [ax,ay]=tr.p[k-1],[bx,by]=tr.p[k];
-      const len=Math.hypot(bx-ax,by-ay), n=Math.max(1,Math.round(len/7));
-      for(let s2=0;s2<=n;s2++){
-        const x=ax+(bx-ax)*s2/n, y=ay+(by-ay)*s2/n;
-        tr.sub.push([x,y,Math.hypot(x,y)]);
-      }
-    }
-  });
-
   const PIECES = [
     {sx:-190, sy: 110, sz:-130, w0:.03, w1:.16, rz:-1.1, rx: .6},
     {sx:   0, sy: -30, sz:  90, w0:.00, w1:.10, rz:  .4, rx:-.4},
@@ -1250,24 +1237,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(pe[4]<.05 && aliveT===null) aliveT=firstFrame? t-20 : t;
     firstFrame=false;
     const alive=aliveT!==null, age=alive?t-aliveT:0;
-    /* lub-dub: primary wave + softer secondary 0.36s later; fronts launch fast then decelerate */
-    const b1=alive?(age%HEART)/HEART:0;
-    const t2=age-0.36;
-    const b2=(alive&&t2>0)?(t2%HEART)/HEART:1;
-    const waveOf=(b,amp)=>{
-      if(!alive||b<=0||b>=1) return null;
-      const r=310*(1-Math.pow(1-b,3));
-      const a=Math.min(1,b/.06)*Math.pow(1-b,1.5)*amp;
-      return {r,a,s:20+r*.06};
-    };
-    const W1=waveOf(b1,1), W2=waveOf(b2,.55);
-    const hb=alive?Math.min(1.15,Math.exp(-b1*5)+(b2<1?.5*Math.exp(-b2*5):0)):0;
-    const boost=d=>{
-      let v=0;
-      if(W1){const g=1-Math.abs(d-W1.r)/W1.s; if(g>0)v+=g*W1.a;}
-      if(W2){const g=1-Math.abs(d-W2.r)/W2.s; if(g>0)v+=g*W2.a;}
-      return v;
-    };
+    const beat=alive?(age%HEART)/HEART:0, hb=alive?Math.exp(-beat*4.5):0, rippleR=beat*310;
 
     const B=smooth(clamp01((ju-.86)/.14));
     if(!reduceMotion) spinIdle+=dt*0.09*(1-B);
@@ -1341,23 +1311,17 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       ctx.beginPath(); ctx.moveTo(TX[e.a],TY[e.a]); ctx.lineTo(TX[e.b],TY[e.b]); ctx.stroke();
     }
 
-    /* ---- pulse conduction over seated geometry: edges flash as the wavefront passes ---- */
-    if(alive&&(W1||W2)){
+    /* ---- orange ripple pulsing across seated geometry (single wave, as original) ---- */
+    if(alive){
       for(let i=0;i<EDGES.length;i++){
         const e=EDGES[i];
         if(pe[e.pc]>=.05||pa[e.pc]<=0||TX[e.a]===null) continue;
-        const v=boost(EDM[i]);
-        if(v<.05) continue;
-        ctx.globalAlpha=Math.min(1,v*.95*DIM);
-        ctx.strokeStyle='rgba(255,126,53,1)';
-        ctx.lineWidth=e.w*1.9*Math.max(.6,S)*((TP[e.a]+TP[e.b])*.5);
+        const db=1-Math.abs(EDM[i]-rippleR)/26;
+        if(db<=0) continue;
+        ctx.globalAlpha=Math.min(1,db*.85*DIM);
+        ctx.strokeStyle='rgba('+ORANGE+',1)';
+        ctx.lineWidth=e.w*1.7*Math.max(.6,S)*((TP[e.a]+TP[e.b])*.5);
         ctx.beginPath(); ctx.moveTo(TX[e.a],TY[e.a]); ctx.lineTo(TX[e.b],TY[e.b]); ctx.stroke();
-        if(v>.5){
-          ctx.globalAlpha=Math.min(1,(v-.5)*1.4*DIM);
-          ctx.strokeStyle='rgba(255,224,190,1)';
-          ctx.lineWidth=e.w*.9*Math.max(.6,S);
-          ctx.beginPath(); ctx.moveTo(TX[e.a],TY[e.a]); ctx.lineTo(TX[e.b],TY[e.b]); ctx.stroke();
-        }
       }
       ctx.globalAlpha=1;
     }
@@ -1380,49 +1344,6 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       ctx.fillStyle='rgba('+WHITE+',1)'; ctx.fill();
     }
 
-    /* ---- energy flowing along docked traces ---- */
-    if(alive&&(W1||W2)){
-      for(const tr of TRACES){
-        if(pe[tr.gate]>=.05) continue;
-        for(const q of tr.sub){
-          const v=boost(q[2]);
-          if(v<.06) continue;
-          const pr=proj3(q[0],q[1],12.6);
-          const d=7*S*v+3;
-          ctx.globalAlpha=Math.min(1,v*.95*DIM);
-          ctx.drawImage(SP[1],pr[0]-d/2,pr[1]-d/2,d,d);
-        }
-      }
-      ctx.globalAlpha=1;
-    }
-
-    /* ---- wavefront rings: soft glow + hot core, decelerating outward ---- */
-    if(alive){
-      [W1,W2].forEach(Wv=>{
-        if(!Wv||Wv.a<.02) return;
-        for(const pass of [[7,.32,'255,106,43'],[2.2,.9,'255,180,120']]){
-          ctx.globalAlpha=Math.min(1,Wv.a*pass[1]*DIM);
-          ctx.strokeStyle='rgba('+pass[2]+',1)';
-          ctx.lineWidth=pass[0]*Math.max(.6,S);
-          ctx.beginPath();
-          for(let k=0;k<=48;k++){
-            const a2=k/48*6.283, pr=proj3(Math.cos(a2)*Wv.r,Math.sin(a2)*Wv.r,12.5);
-            k?ctx.lineTo(pr[0],pr[1]):ctx.moveTo(pr[0],pr[1]);
-          }
-          ctx.stroke();
-        }
-      });
-      /* die thump halo, synced to the beat */
-      if(hb>.03){
-        const p0=proj3(0,0,32);
-        const hg=ctx.createRadialGradient(p0[0],p0[1],0,p0[0],p0[1],120*S);
-        hg.addColorStop(0,'rgba(255,140,60,'+(.3*Math.min(1,hb)*DIM)+')');
-        hg.addColorStop(1,'rgba(0,0,0,0)');
-        ctx.fillStyle=hg;
-        ctx.fillRect(p0[0]-130*S,p0[1]-130*S,260*S,260*S);
-      }
-      ctx.globalAlpha=1;
-    }
 
     /* ---- particles (accents) ---- */
     const sweep=((t*85)%(H+200))-100;
@@ -1440,8 +1361,8 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       ctx.globalAlpha=Math.min(1,a);
       ctx.drawImage(SP[p.c],pr[0]-d/2,pr[1]-d/2,d,d);
       if(alive&&pe[p.pc]<.05){
-        const db=boost(p.d);
-        if(db>.05){ ctx.globalAlpha=Math.min(1,db*.9*DIM);
+        const db=1-Math.abs(p.d-rippleR)/26;
+        if(db>0){ ctx.globalAlpha=Math.min(1,db*.85*DIM);
           ctx.drawImage(SP[1],pr[0]-d*.8,pr[1]-d*.8,d*1.6,d*1.6); }
       }
     }
