@@ -1113,7 +1113,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const uLab    = centerU(q('#lab-notes'), docH);
     const uF      = centerU(q('#finale'), docH);
     const uCon    = centerU(q('#contact'), docH);
-    uFin = uF !== null ? uF : .9;
+    uFin = (uF !== null && uF > 0.05) ? uF : .9;
 
     const raw = [
       [0,       .74, .50, 1.00, 0.0,  .90],
@@ -1137,7 +1137,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       lastU = u;
     });
   }
-  const smooth=v=>v*v*(3-2*v), clamp01=v=>Math.min(1,Math.max(0,v));
+  const smooth=v=>v*v*(3-2*v), clamp01=v=>(v>0?(v<1?v:1):0);
   const wrapPi=a=>((a+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI;
   function sample(u){
     if(u<=KEYS[0].u) return {...KEYS[0]};
@@ -1207,6 +1207,8 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
   for(let i=0;i<NP;i++){ M.push([1,0,0,0,1,0,0,0,1]); OFFS.push([0,0,0]); }
   resize();
+  setTimeout(buildTimeline, 400);
+  setTimeout(buildTimeline, 1600);
 
   const pe=new Array(NP).fill(1), pa=new Array(NP).fill(1);
   const TMP=[0,0,0];
@@ -1251,6 +1253,12 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     cy=st.y*H + my*12 + Math.cos(t*.37)*7*wob;
     S=Math.min(W,H)/620*st.sc*(MOBILE?.72:1);
     const DIM=MOBILE?.42:1;
+
+    /* circuit breaker: never let a bad layout measurement kill rendering */
+    if(!isFinite(cx+cy+S+cosT+sinT+cosF+sinF)){
+      buildTimeline(); spinIdle=0;
+      return;                                   // rAF already queued; retry next frame
+    }
 
     ctx.clearRect(0,0,W,H);
     const bg=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(W,H)*.55*st.sc);
@@ -1316,11 +1324,15 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       for(let i=0;i<EDGES.length;i++){
         const e=EDGES[i];
         if(pe[e.pc]>=.05||pa[e.pc]<=0||TX[e.a]===null) continue;
-        const db=1-Math.abs(EDM[i]-rippleR)/26;
+        const db=1-Math.abs(EDM[i]-rippleR)/30;
         if(db<=0) continue;
-        ctx.globalAlpha=Math.min(1,db*.85*DIM);
+        const plw=e.w*Math.max(.6,S)*((TP[e.a]+TP[e.b])*.5);
         ctx.strokeStyle='rgba('+ORANGE+',1)';
-        ctx.lineWidth=e.w*1.7*Math.max(.6,S)*((TP[e.a]+TP[e.b])*.5);
+        ctx.globalAlpha=Math.min(1,db*.6*DIM);          /* soft glow */
+        ctx.lineWidth=plw*4.2;
+        ctx.beginPath(); ctx.moveTo(TX[e.a],TY[e.a]); ctx.lineTo(TX[e.b],TY[e.b]); ctx.stroke();
+        ctx.globalAlpha=Math.min(1,db*1.35*DIM);        /* hot core */
+        ctx.lineWidth=plw*1.8;
         ctx.beginPath(); ctx.moveTo(TX[e.a],TY[e.a]); ctx.lineTo(TX[e.b],TY[e.b]); ctx.stroke();
       }
       ctx.globalAlpha=1;
@@ -1356,14 +1368,14 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       a*=1+Math.max(0,1-Math.abs(pr[1]-sweep)/34)*.8;
       a*=pa[p.pc]*(.75+.25*pr[2])*DIM;
       if(p.pc===8)a*=paneFade;
-      if(p.pc===4&&alive)a*=.75+.55*hb;
+      if(p.pc===4&&alive)a*=.7+.9*hb;
       const d=Math.max(2.2,p.sz*5.2*S*pr[2]);
       ctx.globalAlpha=Math.min(1,a);
       ctx.drawImage(SP[p.c],pr[0]-d/2,pr[1]-d/2,d,d);
       if(alive&&pe[p.pc]<.05){
-        const db=1-Math.abs(p.d-rippleR)/26;
-        if(db>0){ ctx.globalAlpha=Math.min(1,db*.85*DIM);
-          ctx.drawImage(SP[1],pr[0]-d*.8,pr[1]-d*.8,d*1.6,d*1.6); }
+        const db=1-Math.abs(p.d-rippleR)/30;
+        if(db>0){ ctx.globalAlpha=Math.min(1,db*1.25*DIM);
+          ctx.drawImage(SP[1],pr[0]-d*1.05,pr[1]-d*1.05,d*2.1,d*2.1); }
       }
     }
     ctx.globalAlpha=1;
@@ -1378,8 +1390,8 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const q0=proj3(o0[0],o0[1],o0[2]),qu=proj3(ou[0],ou[1],ou[2]),qv=proj3(ov[0],ov[1],ov[2]);
       ctx.transform(qu[0]-q0[0],qu[1]-q0[1],qv[0]-q0[0],qv[1]-q0[1],q0[0],q0[1]);
       ctx.font='700 26px "JetBrains Mono",monospace'; ctx.textAlign='center';
-      if(alive){ ctx.shadowColor='rgba(255,106,43,.9)'; ctx.shadowBlur=22;
-        ctx.fillStyle='rgba(255,180,120,'+(.55*hb*DIM)+')'; ctx.fillText('SKP',0,0); ctx.shadowBlur=0; }
+      if(alive){ ctx.shadowColor='rgba(255,106,43,1)'; ctx.shadowBlur=28;
+        ctx.fillStyle='rgba(255,190,130,'+Math.min(1,.85*hb*DIM)+')'; ctx.fillText('SKP',0,0); ctx.shadowBlur=0; }
       ctx.fillStyle='rgba(205,246,255,'+(.98*pa[3]*DIM)+')'; ctx.fillText('SKP',0,0);
       ctx.restore();
     }
