@@ -15,7 +15,7 @@
   <title>Shrutik Ka Patel — Embedded Firmware Developer | STM32 · FreeRTOS · Ottawa</title>
 
   <!-- SEO -->
-  <meta name="description" content="Shrutik Ka Patel — Embedded Firmware Developer in Ottawa, Canada. Bare-metal C on STM32F407 (ARM Cortex-M4), FreeRTOS, on-device AI, and edge-to-cloud IoT systems. Built SpinDoctor, a real-time predictive maintenance system with on-device ML inference. Carleton University MEng graduate." />
+  <meta name="description" content="Shrutik Ka Patel — Embedded Firmware Developer in Ottawa, Canada. Bare-metal C on STM32F407 (ARM Cortex-M4), FreeRTOS, on-device AI, and edge-to-cloud IoT systems. Built SpinDoctor, a real-time predictive maintenance system with on-device ML inference. Currently building embedded Linux depth — Linux kernel device drivers on BeagleBone Black (ARM Cortex-A8), with Yocto BSP work next. Carleton University MEng graduate." />
   <meta name="author" content="Shrutik Ka Patel" />
   <link rel="canonical" href="https://shrutik-kapatel.github.io/" />
   <meta name="theme-color" content="#030712" />
@@ -54,7 +54,7 @@
       { "@type": "CollegeOrUniversity", "name": "Carleton University" },
       { "@type": "CollegeOrUniversity", "name": "CSPIT, CHARUSAT" }
     ],
-    "knowsAbout": ["Embedded Firmware", "STM32", "ARM Cortex-M4", "FreeRTOS", "Embedded C", "RTOS", "IoT", "SPI", "I2C", "UART", "DMA", "Edge AI", "TinyML", "On-Device Machine Learning", "ESP32", "ESP-IDF", "Predictive Maintenance", "NanoEdge AI"],
+    "knowsAbout": ["Embedded Firmware", "STM32", "ARM Cortex-M4", "ARM Cortex-A8", "FreeRTOS", "Embedded C", "RTOS", "IoT", "SPI", "I2C", "UART", "DMA", "Edge AI", "TinyML", "On-Device Machine Learning", "ESP32", "ESP-IDF", "Predictive Maintenance", "NanoEdge AI", "Embedded Linux", "Linux Kernel", "Linux Device Drivers", "BeagleBone Black", "Yocto", "Cross-Compilation"],
     "sameAs": [
       "https://github.com/Shrutik-KaPatel",
       "https://linkedin.com/in/shrutik-ka-patel-43aa661aa",
@@ -465,6 +465,10 @@
             <div class="tag"><span class="tag-icon">⬢</span> Edge-to-Cloud Architecture</div>
             <div class="tag"><span class="tag-icon">◉</span> Watchdog &amp; Safety Mechanisms</div>
             <div class="tag"><span class="tag-icon">◈</span> Bootloader Development</div>
+            <div class="tag"><span class="tag-icon">◆</span> Embedded Linux</div>
+            <div class="tag"><span class="tag-icon">⬢</span> Linux Kernel &amp; Device Drivers</div>
+            <div class="tag"><span class="tag-icon">◉</span> BeagleBone Black · ARM Cortex-A</div>
+            <div class="tag"><span class="tag-icon">◈</span> Yocto / BSP Development</div>
           </div>
         </div>
       </div>
@@ -506,6 +510,8 @@
 <span class="c-pp">#define</span> <span class="c-num">PROTOCOLS</span>    <span class="c-str">"UART | SPI | I2C | DMA | PWM | MQTT | BLE | USB DFU"</span>
 <span class="c-pp">#define</span> <span class="c-num">FOCUS</span>        <span class="c-str">"Embedded Firmware · RTOS · Edge AI · IoT · HW-SW Integration"</span>
 <span class="c-pp">#define</span> <span class="c-num">LATEST_BUILD</span> <span class="c-str">"SpinDoctor — on-device AI predictive maintenance"</span>
+<span class="c-pp">#define</span> <span class="c-num">NOW</span>          <span class="c-str">"Embedded Linux · kernel device drivers on BeagleBone Black"</span>
+<span class="c-pp">#define</span> <span class="c-num">NEXT</span>         <span class="c-str">"Yocto — custom BSPs &amp; Linux images from source"</span>
 
 <span class="c-kw">typedef struct</span> {
   <span class="c-type">const char</span>* name;              <span class="c-cmt">// "Shrutik Ka Patel"</span>
@@ -703,7 +709,7 @@
         <div class="skill-terminal terminal fade-up d1">
           <div class="t-bar"><div class="t-dot" style="background:#FF5F57"></div><div class="t-dot" style="background:#FEBC2E"></div><div class="t-dot" style="background:#28C840"></div><span class="t-title">ls platforms/</span></div>
           <div style="padding:.6rem 1rem .28rem;font-family:var(--mono);font-size:.67rem;color:#00D4FF;">$ cat hardware_platforms.skills</div>
-          <div class="skill-tags"><span class="skill-tag">STM32F407 (ARM Cortex-M4)</span><span class="skill-tag">ESP32</span><span class="skill-tag">Arduino (Uno · Nano · Mega)</span><span class="skill-tag">Raspberry Pi</span><span class="skill-tag">ESP8266</span><span class="skill-tag">FPGA Spartan-6</span><span class="skill-tag">Logic Analyzer</span></div>
+          <div class="skill-tags"><span class="skill-tag">STM32F407 (ARM Cortex-M4)</span><span class="skill-tag">ESP32</span><span class="skill-tag">BeagleBone Black (ARM Cortex-A8)</span><span class="skill-tag">Arduino (Uno · Nano · Mega)</span><span class="skill-tag">Raspberry Pi</span><span class="skill-tag">ESP8266</span><span class="skill-tag">FPGA Spartan-6</span><span class="skill-tag">Logic Analyzer</span></div>
         </div>
 
         <div class="skill-terminal terminal fade-up d2">
@@ -746,11 +752,11 @@
           <div class="t-bar"><div class="t-dot" style="background:#FF5F57"></div><div class="t-dot" style="background:#FEBC2E"></div><div class="t-dot" style="background:#28C840"></div><span class="t-title">learning.log</span></div>
           <div class="t-body">
             <div class="t-cmd">$ tail -f currently_learning.txt</div>
-            <div style="display:flex;gap:.4rem;margin-top:.2rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Richer LLM grounding for SpinDoctor - per-axis vibration data + trend history in Gemini prompts</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">On-device inference benchmarking - cycle-accurate CNN timing on Cortex-M4</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">CMake CD pipeline - auto-publish .bin as GitHub Release</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">LoRa point-to-point with SX1262 (DX-LR30)</span></div>
-            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">CMSIS-DSP frequency-domain feature engineering</span></div>
+            <div style="display:flex;gap:.4rem;margin-top:.2rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Linux device drivers on BeagleBone Black (ARM Cortex-A8) - character devices, kernel modules, procfs / sysfs, ioctl</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Embedded Linux internals - kernel boot flow, root filesystems, ext4 / FAT16, Debian-based BBB images</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Cross-compilation for ARM Cortex-A - toolchain setup, kernel + DTB deploy workflow</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">Next: Yocto - custom BSPs and Linux images for the BBB, built from source instead of prebuilt Debian</span></div>
+            <div style="display:flex;gap:.4rem"><span class="t-cmd">›</span><span style="color:var(--fg-muted)">SpinDoctor polish - richer LLM grounding with per-axis vibration data + trend history in Gemini prompts</span></div>
           </div>
         </div>
 
@@ -795,6 +801,7 @@
           <span class="lab-pill">Memory Management</span><span class="lab-pill">GDB</span><span class="lab-pill">Compilation Toolchain</span>
           <span class="lab-pill">C in Linux</span><span class="lab-pill">File Handling</span><span class="lab-pill">Makefile</span>
           <span class="lab-pill">Communication Protocols</span><span class="lab-pill">Shell Scripting</span><span class="lab-pill">Git</span><span class="lab-pill">Vim</span>
+          <span class="lab-pill">Embedded Linux</span><span class="lab-pill">Linux Kernel</span><span class="lab-pill">Device Drivers</span><span class="lab-pill">BeagleBone Black</span><span class="lab-pill">Cross-Compilation</span>
         </div>
       </div>
       <a href="https://github.com/Shrutik-KaPatel" target="_blank" rel="noopener" class="lab-link">Explore on GitHub →</a>
@@ -912,6 +919,7 @@ const lines=[
   {cmd:'$ target',     vals:['STM32F407 · ARM Cortex-M4 · 168 MHz · FreeRTOS · ESP32']},
   {cmd:'$ protocols',  vals:['UART/DMA · SPI · I2C · ADC · DAC · PWM · USB DFU · MQTT · Bluetooth (HC-05) · WiFi']},
   {cmd:'$ latest',     vals:['SpinDoctor — on-device AI fault detection (STM32 + ESP32 + Gemini)']},
+  {cmd:'$ now',        vals:['Embedded Linux · Linux kernel device drivers on BeagleBone Black (ARM Cortex-A8) → Yocto BSPs next']},
   {cmd:'$ focus',      vals:['Embedded Firmware · RTOS · Edge AI · HW-SW Integration · IoT']},
 ];
 const tout=document.getElementById('terminal-out');
