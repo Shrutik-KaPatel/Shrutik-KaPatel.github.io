@@ -397,7 +397,7 @@
   <div class="hero-ambient" aria-hidden="true"></div>
   <div id="hero">
     <div class="hero-content">
-      <div class="hero-badge fade-up"><span style="color:var(--primary)">~/</span> firmware · rtos · edge-ai · iot · stm32 <span style="color:var(--primary);animation:pulse 1.5s ease-in-out infinite;display:inline-block;">_</span></div>
+      <div class="hero-badge fade-up"><span style="color:var(--primary)">~/</span> firmware · rtos · edge-ai · iot · stm32 · embedded-linux <span style="color:var(--primary);animation:pulse 1.5s ease-in-out infinite;display:inline-block;">_</span></div>
       <h1 class="hero-name fade-up d1"><span>Shrutik</span><em class="gt">Ka Patel</em></h1>
       <div class="hero-sub fade-up d1">
         <span class="hero-sub-line"></span>
@@ -431,9 +431,9 @@
 <!-- STATS -->
 <div class="stats-bar">
   <div class="stat fade-up"><div class="stat-val">20+</div><div class="stat-lbl">Embedded &amp; Hardware Projects</div></div>
-  <div class="stat fade-up d1"><div class="stat-val sm">STM32 · ESP32 · ARM Cortex-M4</div><div class="stat-lbl">Primary Platforms</div></div>
+  <div class="stat fade-up d1"><div class="stat-val sm">STM32 · ESP32 · BeagleBone Black · ARM Cortex-M4/A8</div><div class="stat-lbl">Primary Platforms</div></div>
   <div class="stat fade-up d2"><div class="stat-val sm">UART · SPI · I²C · MQTT · BLE</div><div class="stat-lbl">Protocols Implemented</div></div>
-  <div class="stat fade-up d3"><div class="stat-val sm">Firmware · RTOS · Edge AI · IoT</div><div class="stat-lbl">Focus Areas</div></div>
+  <div class="stat fade-up d3"><div class="stat-val sm">Firmware · RTOS · Edge AI · IoT · Embedded Linux</div><div class="stat-lbl">Focus Areas</div></div>
 </div>
 
 <canvas class="wave-divider" data-wave="pwm"></canvas>
@@ -762,7 +762,7 @@
 
           <div class="qs-grid fade-up d3">
           <div class="qs-card"><p class="qs-lbl">Languages</p><p class="qs-val">C, C++, Embedded C, Python, FreeRTOS, Bash</p></div>
-          <div class="qs-card"><p class="qs-lbl">Platforms</p><p class="qs-val">STM32F407, ESP32, RPi, Arduino, ESP8266, FPGA</p></div>
+          <div class="qs-card"><p class="qs-lbl">Platforms</p><p class="qs-val">STM32F407, ESP32, BeagleBone Black, RPi, Arduino, ESP8266, FPGA</p></div>
           <div class="qs-card"><p class="qs-lbl">Protocols</p><p class="qs-val">UART, SPI, I²C, MQTT, BLE, USB DFU, PWM</p></div>
           <div class="qs-card"><p class="qs-lbl">Tools</p><p class="qs-val">GDB, STM32CubeIDE, ESP-IDF, NanoEdge AI, CMake, Vivado, Minicom</p></div>
         </div>
@@ -916,11 +916,11 @@ draw();
 // TERMINAL TYPEWRITER
 const lines=[
   {cmd:'$ whoami',     vals:['Shrutik Ka Patel']},
-  {cmd:'$ target',     vals:['STM32F407 · ARM Cortex-M4 · 168 MHz · FreeRTOS · ESP32']},
+  {cmd:'$ target',     vals:['STM32F407 (Cortex-M4, 168 MHz) · FreeRTOS · ESP32 · BeagleBone Black (Cortex-A8) · Embedded Linux · Yocto']},
   {cmd:'$ protocols',  vals:['UART/DMA · SPI · I2C · ADC · DAC · PWM · USB DFU · MQTT · Bluetooth (HC-05) · WiFi']},
   {cmd:'$ latest',     vals:['SpinDoctor — on-device AI fault detection (STM32 + ESP32 + Gemini)']},
   {cmd:'$ now',        vals:['Embedded Linux · Linux kernel device drivers on BeagleBone Black (ARM Cortex-A8) → Yocto BSPs next']},
-  {cmd:'$ focus',      vals:['Embedded Firmware · RTOS · Edge AI · HW-SW Integration · IoT']},
+  {cmd:'$ focus',      vals:['Embedded Firmware · Embedded Linux · RTOS · Edge AI · HW-SW Integration · IoT']},
 ];
 const tout=document.getElementById('terminal-out');
 let li=0,ci=0;
